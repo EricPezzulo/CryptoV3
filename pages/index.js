@@ -1,13 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CoinCard from "../components/CoinCard";
-import Pagination from "react-mui-pagination";
-import Stack from "@mui/material/Stack";
-import { usePagination } from "@mui/material/Pagination";
 
 export default function Home() {
   const [coinData, setCoinData] = useState([]);
-
   const coinEndpoint =
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false";
 
