@@ -11,7 +11,7 @@ function CharacterCard({
   coinLow24Hr,
 }) {
   return (
-    <div className="flex flex-col w-64 bg-white h-96 rounded-lg">
+    <div className="flex flex-col w-64 bg-gradient-to-tr from-gray-200 to-white h-96 rounded-lg">
       <div className="flex flex-col place-items-start pl-3 pt-2">
         <h1>Name: {coinName}</h1>
         <p>Symbol: {coinSymbol}</p>

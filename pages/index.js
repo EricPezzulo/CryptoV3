@@ -14,7 +14,7 @@ export default function Home() {
         const res = await axios.get(coinEndpoint);
         setCoinData(res.data);
       } catch (error) {
-        console.log("an error as occurred fetching the data");
+        console.log("A problem has occured while trying to fetch data");
       }
     };
     fetchData();
@@ -25,9 +25,9 @@ export default function Home() {
       <h1 className="text-5xl">Coin List</h1>
       <h3 className="text-2xl">CoinGecko API</h3>
 
-      <div className="flex flex-wrap w-10/12 justify-center items-center h-full overflow-x-scroll rounded-xl bg-gradient-to-br from-purple-200  to-blue-200">
+      <div className="flex flex-wrap w-10/12 justify-center items-center h-full rounded-xl bg-gradient-to-br from-purple-200 to-blue-200">
         {coinData.map((coin) => (
-          <div key={coin.id} className="flex m-1">
+          <div key={coin.id} className="flex m-2">
             <CharacterCard
               coinName={coin.name}
               coinSymbol={coin.symbol}
