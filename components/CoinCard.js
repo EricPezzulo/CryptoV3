@@ -1,6 +1,6 @@
 import React from "react";
 
-function CharacterCard({
+function CoinCard({
   coinName,
   coinSymbol,
   coinID,
@@ -32,4 +32,4 @@ function CharacterCard({
   );
 }
 
-export default CharacterCard;
+export default CoinCard;

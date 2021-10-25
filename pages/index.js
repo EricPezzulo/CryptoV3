@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import CharacterCard from "../components/CharacterCard";
+import CoinCard from "../components/CoinCard";
+import Pagination from "react-mui-pagination";
+import Stack from "@mui/material/Stack";
+import { usePagination } from "@mui/material/Pagination";
 
 export default function Home() {
   const [coinData, setCoinData] = useState([]);
@@ -28,7 +31,7 @@ export default function Home() {
       <div className="flex flex-wrap w-10/12 justify-center items-center h-full rounded-xl bg-gradient-to-br from-purple-200 to-blue-200">
         {coinData.map((coin) => (
           <div key={coin.id} className="flex m-2">
-            <CharacterCard
+            <CoinCard
               coinName={coin.name}
               coinSymbol={coin.symbol}
               coinID={coin.id}
