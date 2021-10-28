@@ -1,4 +1,8 @@
 import { useSession, signIn, signOut } from "next-auth/react";
+import GitHubIcon from "@mui/icons-material/GitHub";
+// import GoogleIcon from "@mui/icons-material/Google";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import { useRouter } from "next/router";
 
 export default function SignIn() {
   const { data: session } = useSession();
@@ -11,23 +15,31 @@ export default function SignIn() {
     );
   }
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       Not signed in <br />{" "}
-      <button
-        className="flex bg-blue-600 w-20 h-20"
-        onClick={() => signIn("github")}
-      >
-        Sign in
-      </button>
-    </>
-  );
-  return (
-    <>
-      <div className="flex flex-col w-full items-center justify-center h-header-screen">
-        <div className="flex  items-center justify-content bg-white rounded-xl w-3/4 h-2/4 p-2">
-          <div className="flex flex-col h-full w-full items-center justify-center"></div>
+      <div className="flex">
+        <div className="flex rounded px-3 py-1">
+          <div className="flex">
+            <div className="flex px-2">
+              <GitHubIcon
+                onClick={() =>
+                  signIn("github", { callbackUrl: "http://localhost:3000" })
+                }
+              />
+            </div>
+            <div className="flex px-2">
+              {/* <GoogleIcon onClick={() => signIn("google")} /> */}
+            </div>
+            <div className="flex px-2">
+              <TwitterIcon
+                onClick={() =>
+                  signIn("twitter", { callbackUrl: "http://localhost:3000" })
+                }
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

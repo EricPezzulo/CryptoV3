@@ -12,6 +12,7 @@ export async function getServerSideProps() {
 function users({ data }) {
   const users = data.data;
   console.log(users);
+  // console.log(users[5].name[0].join);
   return (
     <div className="flex flex-col w-full h-full">
       <h1>userspage</h1>
