@@ -58,15 +58,18 @@ const userRoutes = async (fastify, opts, done) => {
   });
 
   //**  add coin to watchlist  **/
-  fastify.put(":/id/addcointowatchlist", async (request, reply) => {
+  fastify.put("/:id/addcointowatchlist", async (request, reply) => {
     try {
       const { id } = request.params;
       const coin = request.body;
-      const addedCoin = await User.findByIdAndUpdate(id, {
-        $push: { watchlists: { coins: { coin } } },
+      console.log(coin);
+
+      const addedCoin = await User.updateOne({
+        $push: {
+          coins: coin,
+        },
       });
       await addedCoin.save();
-      console.log(coin);
     } catch (error) {
       reply.status(500).send({
         error: `failed to add coin to watchlist`,

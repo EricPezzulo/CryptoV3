@@ -62,9 +62,9 @@ function index({ data }) {
     getUserData();
   }, []);
 
-  console.log(session?.id);
+  // console.log(session?.id);
   // console.log(userData?.[1]?.watchlists?.[1]?.coins[0]);
-  console.log(userData);
+  // console.log(userData);
 
   // console.log(coinData.id);
 
