@@ -33,7 +33,7 @@ export default async function auth(req, res) {
       pages: { signIn: "/auth/signin" },
       callbacks: {
         async session({ session, user }) {
-          session._id = user._id;
+          session.id = user.id;
           return Promise.resolve(session);
         },
       },

@@ -65,7 +65,7 @@ export default function Home() {
             <h1>{session.user.name}</h1>
           </>
         )}
-        {/* <div className="flex">
+        <div className="flex">
           <label type="text">Display&nbsp;</label>
           <select
             id="displayAmount"
@@ -81,7 +81,7 @@ export default function Home() {
             <option value={20}>20</option>
           </select>
           <label>&nbsp;per page</label>
-        </div> */}
+        </div>
         <div className="flex w-10/12 justify-center items-center h-full rounded-xl bg-gradient-to-br from-purple-200 to-blue-200">
           <div className="flex flex-col w-full items-center justify-center">
             <div className="flex flex-col w-full items-center justify-center p-4">

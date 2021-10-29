@@ -76,7 +76,7 @@ function add() {
   const newWatchlist = async () => {
     try {
       const res = await axios({
-        url: "http://localhost:5000/api/users/617a1c007a264e3a6aaa5f5c/edit",
+        url: "http://localhost:5000/api/users/617a1c007a264e3a6aaa5f5c/addwatchlist",
         method: "PUT",
         data: {
           watchlistName: watchlistName,
