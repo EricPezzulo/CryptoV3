@@ -46,13 +46,14 @@ const userRoutes = async (fastify, opts, done) => {
       const { id } = request.params;
       const watchlist = request.body;
       console.log(watchlist);
+
       const updatedUser = await User.findByIdAndUpdate(id, {
         $push: { watchlists: watchlist },
       });
       await updatedUser.save();
     } catch (error) {
       reply.status(500).send({
-        error: `failed to create new watchlist for `,
+        error: `failed to create new watchlist for`,
       });
     }
   });
@@ -61,19 +62,29 @@ const userRoutes = async (fastify, opts, done) => {
   fastify.put("/:id/addcointowatchlist", async (request, reply) => {
     try {
       const { id } = request.params;
-      const coin = request.body;
-      console.log(coin);
+      const newCoin = request.body;
 
-      const addedCoin = await User.updateOne({
-        $push: {
-          coins: coin,
+      // get the user
+      let user = await User.findById(id);
+
+      // push the new coin to the User's watchlist
+      user.watchlists[0].coins[0].coin.push(newCoin);
+
+      //update the user document
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: id },
+        {
+          watchlists: user.watchlists,
         },
-      });
-      await addedCoin.save();
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+
+      reply.status(201).send(updatedUser);
     } catch (error) {
-      reply.status(500).send({
-        error: `failed to add coin to watchlist`,
-      });
+      reply.status(500).send("could not add to list");
     }
   });
 
