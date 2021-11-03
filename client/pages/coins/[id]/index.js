@@ -15,18 +15,18 @@ function index({ data }) {
   const [coinData, setCoinData] = useState([]);
   const [coinImage, setCoinImage] = useState("");
   const [coinID, setCoinID] = useState("");
-  const [coinSymbol, setCoinSymbol] = useState("");
-  const [coinName, setCoinName] = useState("");
-  const [coin24H_high, setCoin24H_high] = useState("");
-  const [coin24H_low, setCoin24H_low] = useState("");
+  // const [coinSymbol, setCoinSymbol] = useState("");
+  // const [coinName, setCoinName] = useState("");
+  // const [coin24H_high, setCoin24H_high] = useState("");
+  // const [coin24H_low, setCoin24H_low] = useState("");
   const [description, setDescription] = useState("");
   const [watchlistName, setWatchlistName] = useState("");
 
-  const [sessionData, setSessionData] = useState();
-  const [userID, setUserID] = useState();
-  const [userEmial, setUserEmail] = useState();
-  const [userData, setUserData] = useState([]);
-
+  // const [sessionData, setSessionData] = useState();
+  // const [userID, setUserID] = useState();
+  // const [userEmial, setUserEmail] = useState();
+  // const [userData, setUserData] = useState([]);
+  const [currentUser, setCurrentUser] = useState();
   const [selectWatchlist, setSelectWatchlist] = useState("");
 
   const apiEndpoint = `https://api.coingecko.com/api/v3/coins/${coinURL}`;
@@ -37,48 +37,42 @@ function index({ data }) {
       const { data } = res;
       console.log(data);
       setCoinData(data);
-      setCoinImage(data.image.large);
-      setDescription(data.description.en);
-      setCoinID(data.id);
-      setCoinSymbol(data.symbol);
-      setCoinName(data.name);
-      setCoin24H_high(data.market_data.high_24h.usd);
-      setCoin24H_low(data.market_data.low_24h.usd);
+      //   setCoinImage(data.image.large);
+      //   setDescription(data.description.en);
+      //   setCoinID(data.id);
+      //   setCoinSymbol(data.symbol);
+      //   setCoinName(data.name);
+      //   setCoin24H_high(data.market_data.high_24h.usd);
+      //   setCoin24H_low(data.market_data.low_24h.usd);
     };
 
-    const getUserData = async () => {
-      const res = await axios.get(`http://localhost:5000/api/users`);
+    const getCurrentUser = async () => {
+      const res = await axios.get(
+        `http://localhost:5000/api/users/${session?.id}`
+      );
       const { data } = res;
-      setUserData(data.data);
-      setUserID(data.data[0]._id);
-      setUserEmail(data.data[0].email);
-
-      // console.log(data.data[0]._id);
-      // console.log(data.data[0]._id);
-      // console.log(userData);
-      // console.log(session);
+      // console.log([data]);
+      setCurrentUser([data]);
     };
+    // const getUserData = async () => {
+    //   const res = await axios.get(`http://localhost:5000/api/users`);
+    //   const { data } = res;
+    //   setUserData(data.data);
+    //   setUserID(data.data[0]._id);
+    //   setUserEmail(data.data[0].email);
+
+    // console.log(data.data[0]._id);
+    // console.log(data.data[0]._id);
+    // console.log(userData);
+    // console.log(session);
+    // };
 
     getData();
-    getUserData();
+    getCurrentUser();
+    // getUserData();
   }, []);
-
-  // console.log(session?.id);
-  // let sessionID = session?.id;
-  // const [currentUser, setCurrentUser] = useState();
-
-  // useEffect(() => {
-  //   const getCurrentUser = async () => {
-  //     const res = await axios.get(
-  //       `http://localhost:5000/api/users/${sessionID}`
-  //     );
-  //     const { data } = res;
-  //     // console.log(data);
-  //     setCurrentUser(data);
-  //   };
-  //   getCurrentUser();
-  // }, []);
-  // console.log(currentUser);
+  console.log(currentUser);
+  // console.log(currentUser.watchlists[0].watchlistName);
   const createNewWatchlist = async () => {
     try {
       const res = await axios({
@@ -118,7 +112,7 @@ function index({ data }) {
     <div className="flex flex-col w-full min-h-screen bg-gray-900">
       <div className="flex flex-col w-full h-full items-center">
         <div className="flex mt-10">
-          <img src={coinImage} alt="currency logo" />
+          <img src={coinData.image?.large} alt="currency logo" />
         </div>
       </div>
       <div className="flex flex-col w-5/6 self-center">
@@ -128,7 +122,9 @@ function index({ data }) {
           Comunity score: {coinData.community_score}
         </p>
         <p className="flex text-white">
-          {description ? description : "no description availible"}
+          {coinData?.description?.en
+            ? coinData?.description?.en
+            : "no description availible"}
         </p>
         <div className="flex flex-col p-5">
           <button onClick={createNewWatchlist} className="text-white text-xl">
@@ -145,7 +141,7 @@ function index({ data }) {
           </button>
           <div className="flex">
             <select onChange={(e) => setSelectWatchlist(e.target.value)}>
-              {userData.map((coin) => {
+              {/* {currentUser.map((coin) => {
                 return (
                   <>
                     {coin?.watchlists.map((c) => {
@@ -157,7 +153,7 @@ function index({ data }) {
                     })}
                   </>
                 );
-              })}
+              })} */}
             </select>
           </div>
         </div>
