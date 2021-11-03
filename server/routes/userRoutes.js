@@ -45,8 +45,11 @@ const userRoutes = async (fastify, opts, done) => {
     try {
       const { id } = request.params;
       const watchlist = request.body;
-      console.log(watchlist);
 
+      // // get user
+      // let user = await User.findById(id);
+
+      // user.push(watchlist);
       const updatedUser = await User.findByIdAndUpdate(id, {
         $push: { watchlists: watchlist },
       });
@@ -66,9 +69,13 @@ const userRoutes = async (fastify, opts, done) => {
 
       // get the user
       let user = await User.findById(id);
+      // find the index of the watchlist to push too
+      const watchlistIndex = user.watchlists.findIndex(
+        (c) => c.watchlistName === newCoin.watchlistName
+      );
 
       // push the new coin to the User's watchlist
-      user.watchlists[0].coins[0].coin.push(newCoin);
+      user.watchlists[watchlistIndex].coins[0].coin.push(newCoin);
 
       //update the user document
       const updatedUser = await User.findOneAndUpdate(

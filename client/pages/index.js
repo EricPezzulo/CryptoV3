@@ -60,11 +60,11 @@ export default function Home() {
         <h1 className="text-5xl">Coin List</h1>
         <h3 className="text-2xl">CoinGecko API</h3>
 
-        {session && (
+        {/* {session && (
           <>
             <h1>{session.user.name}</h1>
           </>
-        )}
+        )} */}
         <div className="flex">
           <label type="text">Display&nbsp;</label>
           <select

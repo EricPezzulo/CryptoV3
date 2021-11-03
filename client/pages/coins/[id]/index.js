@@ -47,7 +47,7 @@ function index({ data }) {
     };
 
     const getUserData = async () => {
-      const res = await axios.get("http://localhost:5000/api/users");
+      const res = await axios.get(`http://localhost:5000/api/users`);
       const { data } = res;
       setUserData(data.data);
       setUserID(data.data[0]._id);
@@ -58,24 +58,27 @@ function index({ data }) {
       // console.log(userData);
       // console.log(session);
     };
+
     getData();
     getUserData();
   }, []);
 
   // console.log(session?.id);
-  // console.log(userData?.[1]?.watchlists?.[1]?.coins[0]);
-  // console.log(userData);
+  // let sessionID = session?.id;
+  // const [currentUser, setCurrentUser] = useState();
 
-  // console.log(coinData.id);
-
-  // console.log(session?.user?.email);
-
-  // async function myFunction(req, res) {
-  //   const session = await getSession({ req });
-
-  //   console.log(session);
-  // }
-  // myFunction();
+  // useEffect(() => {
+  //   const getCurrentUser = async () => {
+  //     const res = await axios.get(
+  //       `http://localhost:5000/api/users/${sessionID}`
+  //     );
+  //     const { data } = res;
+  //     // console.log(data);
+  //     setCurrentUser(data);
+  //   };
+  //   getCurrentUser();
+  // }, []);
+  // console.log(currentUser);
   const createNewWatchlist = async () => {
     try {
       const res = await axios({
@@ -84,12 +87,9 @@ function index({ data }) {
         data: {
           watchlistName: watchlistName,
           coins: {
-            coinName: coinName,
-            coinSymbol: coinSymbol,
-            coinID: coinID,
-            coinImage: coinImage,
-            coin24H_high: coin24H_high,
-            coin24H_low: coin24H_low,
+            coin: {
+              coinID: coinID,
+            },
           },
         },
       });
@@ -105,12 +105,8 @@ function index({ data }) {
         url: `http://localhost:5000/api/users/${session?.id}/addcointowatchlist`,
         method: "PUT",
         data: {
-          coinName: coinName,
-          coinSymbol: coinSymbol,
+          watchlistName: selectWatchlist,
           coinID: coinID,
-          coinImage: coinImage,
-          coin24H_high: coin24H_high,
-          coin24H_low: coin24H_low,
         },
       });
     } catch (error) {
@@ -154,7 +150,7 @@ function index({ data }) {
                   <>
                     {coin?.watchlists.map((c) => {
                       return (
-                        <option key={c.id} value={c.watchlists}>
+                        <option key={c.id} value={c.watchlistName}>
                           {c.watchlistName}
                         </option>
                       );

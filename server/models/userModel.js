@@ -1,35 +1,29 @@
 import mongoose from "mongoose";
-import Watchlists from "../models/watchlistModel.js";
 
 const CoinSchema = new mongoose.Schema({
-  coinName: String,
-  coinSymbol: String,
-  coinID: String,
-  coinImage: String,
-  coin24H_high: String,
-  coin24H_low: String,
+  coinID: { type: String },
+});
+const CoinsSchema = new mongoose.Schema({
+  coin: [CoinSchema],
 });
 
-const WatchlistsSchema = new mongoose.Schema(
-  {
-    watchlistName: { type: String, required: true },
-    coins: [CoinSchema],
-  },
-  { timestamps: true }
-);
+const WatchlistSchema = new mongoose.Schema({
+  watchlistName: { type: String },
+  coins: [CoinsSchema],
+});
 
 const NameSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  userName: { type: String, required: true },
+  firstName: { type: String },
+  lastName: { type: String },
+  username: { type: String },
 });
 
-const UserSchema = new mongoose.Schema(
-  {
-    name: [NameSchema],
-    watchlists: [WatchlistsSchema],
-  },
-  { timestamps: true }
-);
+const UserSchema = new mongoose.Schema({
+  name: [NameSchema],
+  watchlists: [WatchlistSchema],
+  test: String,
+});
+
 const User = mongoose.model("User", UserSchema);
+
 export default User;
