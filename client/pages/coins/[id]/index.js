@@ -13,7 +13,7 @@ function index({ data }) {
   const { data: session } = useSession();
   const coinURL = data.id; // bitcoin
   const [coinData, setCoinData] = useState([]);
-  const [coinImage, setCoinImage] = useState("");
+  // const [coinImage, setCoinImage] = useState("");
   const [coinID, setCoinID] = useState("");
   // const [coinSymbol, setCoinSymbol] = useState("");
   // const [coinName, setCoinName] = useState("");
@@ -30,49 +30,33 @@ function index({ data }) {
   const [selectWatchlist, setSelectWatchlist] = useState("");
 
   const apiEndpoint = `https://api.coingecko.com/api/v3/coins/${coinURL}`;
-
-  useEffect(() => {
-    const getData = async () => {
+  const getData = async () => {
+    try {
       const res = await axios.get(apiEndpoint);
       const { data } = res;
-      console.log(data);
       setCoinData(data);
-      //   setCoinImage(data.image.large);
-      //   setDescription(data.description.en);
-      //   setCoinID(data.id);
-      //   setCoinSymbol(data.symbol);
-      //   setCoinName(data.name);
-      //   setCoin24H_high(data.market_data.high_24h.usd);
-      //   setCoin24H_low(data.market_data.low_24h.usd);
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const getCurrentUser = async () => {
+  const getCurrentUser = async () => {
+    try {
       const res = await axios.get(
         `http://localhost:5000/api/users/${session?.id}`
       );
       const { data } = res;
       // console.log([data]);
-      setCurrentUser([data]);
-    };
-    // const getUserData = async () => {
-    //   const res = await axios.get(`http://localhost:5000/api/users`);
-    //   const { data } = res;
-    //   setUserData(data.data);
-    //   setUserID(data.data[0]._id);
-    //   setUserEmail(data.data[0].email);
-
-    // console.log(data.data[0]._id);
-    // console.log(data.data[0]._id);
-    // console.log(userData);
-    // console.log(session);
-    // };
-
+      setCurrentUser(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
     getData();
     getCurrentUser();
-    // getUserData();
-  }, []);
-  console.log(currentUser);
-  // console.log(currentUser.watchlists[0].watchlistName);
+  }, [coinData, currentUser]);
+
   const createNewWatchlist = async () => {
     try {
       const res = await axios({
@@ -140,8 +124,8 @@ function index({ data }) {
             add too watchlist
           </button>
           <div className="flex">
-            <select onChange={(e) => setSelectWatchlist(e.target.value)}>
-              {/* {currentUser.map((coin) => {
+            {/* <select onChange={(e) => setSelectWatchlist(e.target.value)}> */}
+            {/* {currentUser.map((coin) => {
                 return (
                   <>
                     {coin?.watchlists.map((c) => {
@@ -154,7 +138,7 @@ function index({ data }) {
                   </>
                 );
               })} */}
-            </select>
+            {/* </select> */}
           </div>
         </div>
       </div>
