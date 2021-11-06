@@ -1,3 +1,4 @@
+import { calculateObjectSize } from "bson";
 import User from "../models/userModel.js";
 
 const userRoutes = async (fastify, opts, done) => {
@@ -109,6 +110,39 @@ const userRoutes = async (fastify, opts, done) => {
     }
   });
 
+  fastify.put("/:id/deletecoin", async (request, reply) => {
+    try {
+      const { id } = request.params;
+      const watchlist = request.body;
+      console.log(watchlist.coins.coin.coinID);
+      // get the user
+      let user = await User.findById(id);
+
+      // find the index of the watchlist to push too
+      const watchlistIndex = user.watchlists.findIndex(
+        (c) => c.watchlistName === request.body.watchlistName
+      );
+      console.log(user.watchlists[watchlistIndex].watchlistName);
+
+      user.watchlists[watchlistIndex].coins[0].coin.pull(
+        watchlist.coins.coin.coinID
+      );
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          watchlists: user.watchlists,
+        },
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+
+      reply.status(201).send(updatedUser);
+    } catch (error) {
+      reply.status(500).send({ error: "cant remove coin from watchlist" });
+    }
+  });
   done();
 };
 

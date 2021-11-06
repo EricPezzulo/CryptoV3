@@ -1,61 +1,39 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import useSWR from "swr";
 
 export async function getServerSideProps({ query }) {
   const id = query;
   return {
-    props: { data: id },
+    props: { props: id },
   };
 }
-
-function index({ data }) {
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
+function index({ props }) {
   const { data: session } = useSession();
-  const coinURL = data.id; // bitcoin
-  const [coinData, setCoinData] = useState([]);
-  // const [coinImage, setCoinImage] = useState("");
-  const [coinID, setCoinID] = useState("");
-  // const [coinSymbol, setCoinSymbol] = useState("");
-  // const [coinName, setCoinName] = useState("");
-  // const [coin24H_high, setCoin24H_high] = useState("");
-  // const [coin24H_low, setCoin24H_low] = useState("");
-  const [description, setDescription] = useState("");
+  const coinURL = props.id; // bitcoin
+  const [coinID, setCoinID] = useState(coinURL);
   const [watchlistName, setWatchlistName] = useState("");
-
-  // const [sessionData, setSessionData] = useState();
-  // const [userID, setUserID] = useState();
-  // const [userEmial, setUserEmail] = useState();
-  // const [userData, setUserData] = useState([]);
-  const [currentUser, setCurrentUser] = useState();
   const [selectWatchlist, setSelectWatchlist] = useState("");
-
   const apiEndpoint = `https://api.coingecko.com/api/v3/coins/${coinURL}`;
-  const getData = async () => {
-    try {
-      const res = await axios.get(apiEndpoint);
-      const { data } = res;
-      setCoinData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const getCurrentUser = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/api/users/${session?.id}`
-      );
-      const { data } = res;
-      // console.log([data]);
-      setCurrentUser(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getData();
-    getCurrentUser();
-  }, [coinData, currentUser]);
+  const { data: userData, userError } = useSWR(
+    `http://localhost:5000/api/users/${session?.id}`,
+    fetcher
+  );
+  console.log(userData);
+
+  const { data: coinData, coinError } = useSWR(apiEndpoint, fetcher);
+  console.log(coinData);
+  if (userError || coinError) {
+    return <div>failed</div>;
+  }
+  if (!userData || !coinData) {
+    return <div>Loading</div>;
+  }
+
+  userData.watchlists.map((i) => console.log(i));
 
   const createNewWatchlist = async () => {
     try {
@@ -124,21 +102,18 @@ function index({ data }) {
             add too watchlist
           </button>
           <div className="flex">
-            {/* <select onChange={(e) => setSelectWatchlist(e.target.value)}> */}
-            {/* {currentUser.map((coin) => {
+            <select onChange={(e) => setSelectWatchlist(e.target.value)}>
+              {userData?.watchlists.map((coin) => {
                 return (
                   <>
-                    {coin?.watchlists.map((c) => {
-                      return (
-                        <option key={c.id} value={c.watchlistName}>
-                          {c.watchlistName}
-                        </option>
-                      );
-                    })}
+                    <option key={coin.id} value={coin.watchlistName}>
+                      {coin.watchlistName}
+                    </option>
+                    );
                   </>
                 );
-              })} */}
-            {/* </select> */}
+              })}
+            </select>
           </div>
         </div>
       </div>

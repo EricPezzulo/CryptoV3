@@ -13,11 +13,12 @@ function Header() {
         <div className="flex">
           {session && (
             <div className="flex h-14 w-14">
-              <img
-                className="flex rounded-full hover:cursor-pointer hover:scale-110 duration-300 transition ease-out"
-                src={session?.user?.image}
-                onClick={signOut}
-              />
+              <Link href={`/users/${session._id}`}>
+                <img
+                  className="flex rounded-full hover:cursor-pointer hover:scale-110 duration-300 transition ease-out"
+                  src={session?.user?.image}
+                />
+              </Link>
             </div>
           )}
           {!session && (

@@ -1,0 +1,7 @@
+###
+PUT http://localhost:5000/api/users/617aecca2a4b7bdaac4e5ff4/deletecoin HTTP/1.1
+Content-Type: "application/json"
+
+{   
+    "coinID": "ripple" 
+}
