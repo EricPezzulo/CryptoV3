@@ -1,27 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import Link from "next/link";
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
-function CoinInUserProfile({ coinID }) {
+function CoinInUserProfile({ coinID, watchlistName }) {
   const { data: session } = useSession();
   const { data, error } = useSWR(
     `https://api.coingecko.com/api/v3/coins/${coinID}`,
     fetcher
   );
-  const removeFromWatchlist = async () => {
+
+  const removeFromWatchlist = async (coinID) => {
     try {
       const res = await axios({
         url: `http://localhost:5000/api/users/${session?.id}/deletecoin`,
         method: "PUT",
         data: {
-          watchlistName: "five",
-          coins: {
-            coin: {
-              coinID: coinID,
-            },
-          },
+          watchlistName,
+          coinID,
         },
       });
       console.log("removed");
@@ -29,15 +27,21 @@ function CoinInUserProfile({ coinID }) {
       console.log(error);
     }
   };
+
   if (error) return <div>failed to load coin data</div>;
   if (!data || data === "undefined") return <div>loading coin data...</div>;
   return (
-    <div className="flex">
-      <p className="text-xl text-green-400">{coinID}</p>
-      <p>{data.symbol}</p>
-      <button type="button" onClick={removeFromWatchlist}>
-        remove
-      </button>
+    <div className="flex flex-col bg-white items-center justify-center m-2 p-2 rounded hover:cursor-pointer">
+      <div className="flex items-center justify-between w-full">
+        {" "}
+        <div className="flex items-center">
+          <p className="text-xl text-green-400 pr-1 font-light">{coinID}</p>
+          <p className="font-light">({data.symbol})</p>{" "}
+        </div>
+        <button onClick={() => removeFromWatchlist(coinID)}>
+          <DeleteIcon className="text-gray-300 transition duration-200 hover:text-gray-400 hover:cursor-pointer" />
+        </button>
+      </div>
     </div>
   );
 }

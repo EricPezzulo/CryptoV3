@@ -40,6 +40,7 @@ export default function Home() {
                 coinMarketCap={coin.market_cap}
                 coinHigh24hr={coin.high_24h}
                 coinLow24Hr={coin.low_24h}
+                coinPrice={coin.current_price}
               />
             </div>
           </Link>
@@ -57,15 +58,7 @@ export default function Home() {
     <div className="flex flex-col w-full items-center justify-between min-h-screen">
       <Header />
       <div className="flex flex-col w-full h-full items-center">
-        <h1 className="text-5xl">Coin List</h1>
-        <h3 className="text-2xl">CoinGecko API</h3>
-
-        {/* {session && (
-          <>
-            <h1>{session.user.name}</h1>
-          </>
-        )} */}
-        <div className="flex">
+        {/* <div className="flex">
           <label type="text">Display&nbsp;</label>
           <select
             id="displayAmount"
@@ -81,8 +74,8 @@ export default function Home() {
             <option value={20}>20</option>
           </select>
           <label>&nbsp;per page</label>
-        </div>
-        <div className="flex w-10/12 justify-center items-center h-full rounded-xl bg-gradient-to-br from-purple-200 to-blue-200">
+        </div> */}
+        <div className="flex  mt-5 w-10/12 justify-center items-center h-full rounded-md bg-gray-50 border-2 border-red-200">
           <div className="flex flex-col w-full items-center justify-center">
             <div className="flex flex-col w-full items-center justify-center p-4">
               {displayCoins}

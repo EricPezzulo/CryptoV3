@@ -113,20 +113,23 @@ const userRoutes = async (fastify, opts, done) => {
   fastify.put("/:id/deletecoin", async (request, reply) => {
     try {
       const { id } = request.params;
-      const watchlist = request.body;
-      console.log(watchlist.coins.coin.coinID);
+      const { watchlistName, coinID } = request.body;
+
       // get the user
       let user = await User.findById(id);
 
       // find the index of the watchlist to push too
       const watchlistIndex = user.watchlists.findIndex(
-        (c) => c.watchlistName === request.body.watchlistName
+        (c) => c.watchlistName === watchlistName
       );
-      console.log(user.watchlists[watchlistIndex].watchlistName);
-
-      user.watchlists[watchlistIndex].coins[0].coin.pull(
-        watchlist.coins.coin.coinID
+      // find the index of the coin to remove
+      const coinIndex = user.watchlists[watchlistIndex].coins[0].coin.findIndex(
+        (c) => c.coinID === coinID
       );
+      // console.log(coinIndex);
+      // remove the coin from the watchlist it is in.
+      user.watchlists[watchlistIndex].coins[0].coin.splice(coinIndex, 1);
+      // update the user
       const updatedUser = await User.findByIdAndUpdate(
         { _id: id },
         {
@@ -140,7 +143,40 @@ const userRoutes = async (fastify, opts, done) => {
 
       reply.status(201).send(updatedUser);
     } catch (error) {
-      reply.status(500).send({ error: "cant remove coin from watchlist" });
+      reply.status(500).send({ error: "can't remove coin from watchlist" });
+    }
+  });
+  // delete watchlist
+  fastify.put("/:id/deletewatchlist", async (request, reply) => {
+    try {
+      const { id } = request.params;
+      const { watchlistName } = request.body;
+
+      // get the user
+      let user = await User.findById(id);
+
+      // find the index of the watchlist to push too
+      const watchlistIndex = user.watchlists.findIndex(
+        (c) => c.watchlistName === watchlistName
+      );
+
+      // remove the coin from the watchlist it is in.
+      user.watchlists.splice(watchlistIndex, 1);
+      // update the user
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          watchlists: user.watchlists,
+        },
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+
+      reply.status(201).send(updatedUser);
+    } catch (error) {
+      reply.status(500).send({ error: "can't delete watchlist" });
     }
   });
   done();

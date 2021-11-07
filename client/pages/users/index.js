@@ -25,7 +25,7 @@ function users({ data }) {
                 firstName={user.name[0].firstName}
                 lastName={user.name[0].lastName}
                 userName={user.name[0].userName}
-                watchlists={user.watchlists[0].watchlistName}
+                watchlistName={user.watchlists[0].watchlistName}
               />
             </div>
           );
