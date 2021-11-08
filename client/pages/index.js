@@ -95,7 +95,7 @@ export default function Home() {
           breakClassName={"hidden"}
           // breakLinkClassName={"flex"}
           containerClassName={
-            "flex w-96 justify-evenly bg-gray-700 h-12 rounded-full text-gray-400 items-center"
+            "flex w-96 justify-evenly bg-gradient-to-r from-red-300 to-purple-300 h-12 rounded-full text-gray-100 items-center"
           }
           previousLinkClassName={
             "flex items-center justify-center px-2 duration-200 hover:text-white "
