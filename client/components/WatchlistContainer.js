@@ -23,14 +23,12 @@ function WatchlistContainer() {
           watchlistName,
         },
       });
-      console.log(userData.watchlists[1].watchlistName);
     } catch (error) {
       console.log(error);
     }
   };
   if (userError) return <div>failed</div>;
   if (!userData) return <div>loading data...</div>;
-  // console.log(userData);
 
   useEffect(() => {
     axios
@@ -41,36 +39,6 @@ function WatchlistContainer() {
 
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">
-      {/* {userData.watchlists.map((i) => (
-        <div
-          key={i._id}
-          className="flex flex-col bg-gray-100 p-2 rounded m-2 h-full w-64"
-        >
-          <p className="text-2xl font-light">{i.watchlistName}</p>
-
-          {i.coins[0].coin.map((coin) => {
-            return (
-              <div>
-                {/* <p key={coin.coinID}>{coin.coinID}</p> */}
-      {/* <CoinInUserProfile
-                  coinID={coin.coinID}
-                  name={coin.name}
-                  symbol={coin.symbol}
-                  watchlistName={i.watchlistName}
-                />
-              </div>
-            );
-          })}
-
-          <button
-            type="button"
-            onClick={() => deleteWatchlist(i.watchlistName)}
-            className="font-light"
-          >
-            Delete Watchlist
-          </button>
-        </div>
-      ))} */}{" "}
       {listOfCoins.map((i) => (
         <div
           key={i._id}
@@ -95,7 +63,7 @@ function WatchlistContainer() {
           <button
             type="button"
             onClick={() => deleteWatchlist(i.watchlistName)}
-            className="font-light"
+            className="font-light hover:underline"
           >
             Delete Watchlist
           </button>

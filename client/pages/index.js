@@ -3,15 +3,12 @@ import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import CoinCard from "../components/CoinCard";
 import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
 import Header from "../components/Header";
 
 export default function Home() {
-  const { data: session } = useSession();
   const [coinData, setCoinData] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [coinsPerPage, setCoinsPerPage] = useState(10);
-  const [displayNum, setDisplayNum] = useState(null);
   const pagesVisited = pageNumber * coinsPerPage;
   const apiEndpoint =
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false";
@@ -53,28 +50,10 @@ export default function Home() {
   const pageChange = ({ selected }) => {
     setPageNumber(selected);
   };
-
   return (
     <div className="flex flex-col w-full items-center justify-between min-h-screen">
       <Header />
       <div className="flex flex-col w-full h-full items-center">
-        {/* <div className="flex">
-          <label type="text">Display&nbsp;</label>
-          <select
-            id="displayAmount"
-            name="Choose how many to display"
-            onChange={(e) => setDisplayNum(e.target.value)}
-            className="flex w-10 text-white bg-purple-500 rounded cursor-pointer"
-          >
-            <option value={5}>5</option>
-            <option value={10} selected>
-              10
-            </option>
-            <option value={15}>15</option>
-            <option value={20}>20</option>
-          </select>
-          <label>&nbsp;per page</label>
-        </div> */}
         <div className="flex  mt-5 w-10/12 justify-center items-center h-full rounded-md bg-gray-50 border-2 border-red-200">
           <div className="flex flex-col w-full items-center justify-center">
             <div className="flex flex-col w-full items-center justify-center p-4">

@@ -8,7 +8,9 @@ function Header() {
     <div className="flex w-full items-center bg-gradient-to-r from-red-500 to-purple-400 h-12">
       <div className="flex w-full items-center justify-between mx-2">
         <Link href="/">
-          <h1 className="text-white text-2xl font-thin">TheCitadel</h1>
+          <h1 className="text-white text-2xl font-thin hover:cursor-pointer">
+            TheCitadel
+          </h1>
         </Link>
         <div className="flex">
           {session && (

@@ -6,7 +6,6 @@ const userRoutes = async (fastify, opts, done) => {
     try {
       const users = await User.find({});
       reply.status(200).send({ success: true, data: users });
-      console.log(users);
     } catch (error) {
       reply.code(400).send({ errorMessage: error });
     }
@@ -47,17 +46,25 @@ const userRoutes = async (fastify, opts, done) => {
       const { id } = request.params;
       const watchlist = request.body;
 
-      // // get user
-      // let user = await User.findById(id);
+      let user = await User.findById(id);
 
-      // user.push(watchlist);
-      const updatedUser = await User.findByIdAndUpdate(id, {
-        $push: { watchlists: watchlist },
-      });
+      user.watchlists.push(watchlist);
+
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          watchlists: user.watchlists,
+        },
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
       await updatedUser.save();
+      reply.status(201).send(updatedUser);
     } catch (error) {
       reply.status(500).send({
-        error: `failed to create new watchlist for`,
+        error: `failed to create new watchlist`,
       });
     }
   });
@@ -126,7 +133,6 @@ const userRoutes = async (fastify, opts, done) => {
       const coinIndex = user.watchlists[watchlistIndex].coins[0].coin.findIndex(
         (c) => c.coinID === coinID
       );
-      // console.log(coinIndex);
       // remove the coin from the watchlist it is in.
       user.watchlists[watchlistIndex].coins[0].coin.splice(coinIndex, 1);
       // update the user
