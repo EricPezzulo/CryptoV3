@@ -35,7 +35,6 @@ function WatchlistContainer() {
       .get(`http://localhost:5000/api/users/${session?.id}`)
       .then((res) => setListOfCoins(res.data.watchlists));
   }, [listOfCoins]);
-  // console.log(listOfCoins);
 
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">
