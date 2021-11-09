@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import Header from "../../../components/Header";
+import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import { AnimatePresence, motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 export async function getServerSideProps({ query }) {
@@ -44,7 +45,7 @@ function index({ props }) {
         },
       });
       setPopUp(true);
-      setTimeout(() => setPopUp(false), 1500);
+      setTimeout(() => setPopUp(false), 2500);
       console.log(`${watchlistName} created!`);
     } catch (error) {
       console.log(error);
@@ -61,7 +62,7 @@ function index({ props }) {
         },
       });
       setSuccessMessage(true);
-      setTimeout(() => setSuccessMessage(false), 1500);
+      setTimeout(() => setSuccessMessage(false), 2500);
 
       console.log(successMessage);
     } catch (error) {
@@ -70,33 +71,6 @@ function index({ props }) {
   };
 
   const popUpVarient = {
-    hidden: {
-      opacity: 0,
-      x: 0,
-      y: 100,
-    },
-    visable: {
-      opacity: 1,
-      x: 0,
-      y: 75,
-      transition: {
-        type: "spring",
-        mass: 0.4,
-        damping: 8,
-      },
-    },
-    exit: {
-      opacity: 0,
-      x: 0,
-      y: 100,
-      transition: {
-        type: "spring",
-        mass: 0.4,
-        damping: 8,
-      },
-    },
-  };
-  const popUp2Varient = {
     hidden: {
       opacity: 0,
       x: 0,
@@ -230,18 +204,15 @@ function index({ props }) {
                   initial="hidden"
                   animate="visable"
                   exit="exit"
-                  className={`flex absolute right-5 bg-gray-100 items-center justify-between px-2 rounded m-2`}
+                  className={`flex absolute top-5 right-5 bg-gray-100 items-center h-10 justify-between rounded`}
                 >
-                  <p className="flex text-lg">
+                  <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
+                    <EmojiFlagsIcon className="text-white" />
+                  </div>
+                  <p className="flex text-xl font-light px-2">
                     Created new watchlist:
-                    <span className="text-green-400">
-                      &nbsp; {watchlistName}
-                    </span>
-                    !
+                    <p className="text-green-400">&nbsp;{watchlistName}</p>!
                   </p>
-                  <button onClick={() => setPopUp(false)}>
-                    <CloseIcon className="flex duration-300 ease-in-out hover:text-red-500" />
-                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -251,21 +222,21 @@ function index({ props }) {
             <AnimatePresence>
               {successMessage && (
                 <motion.div
-                  variants={popUp2Varient}
+                  variants={popUpVarient}
                   initial="hidden"
                   animate="visable"
                   exit="exit"
-                  className={`flex absolute right-5 bg-gray-100 items-center justify-between px-2 rounded m-2`}
+                  className={`flex absolute top-5 right-5 bg-gray-100 items-center h-10 justify-between rounded`}
                 >
-                  <p className="flex text-lg">
-                    Added &nbsp;
+                  <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
+                    <EmojiFlagsIcon className="text-white" />
+                  </div>
+                  <p className="flex text-lg font-light px-2">
+                    Added&nbsp;
                     <p className="text-blue-400"> {coinData.name} </p>
-                    &nbsp; to &nbsp;
+                    &nbsp;to&nbsp;
                     <p className="text-green-400"> {selectWatchlist} </p>!
                   </p>
-                  <button onClick={() => setSuccessMessage(false)}>
-                    <CloseIcon className="flex duration-300 ease-in-out hover:text-red-500" />
-                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
