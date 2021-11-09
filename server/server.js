@@ -2,9 +2,9 @@ import Fastify from "fastify";
 import fastifyIO from "fastify-socket.io";
 import mongoose from "mongoose";
 import fastifyCors from "fastify-cors";
-import watchlistRoutes from "./routes/watchlistRoutes.js";
 import env from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 env.config();
 
 const fastify = Fastify();
@@ -25,7 +25,7 @@ mongoose
   .then(() => console.log("Connected with Mongoose"))
   .catch(() => console.log("Could not connect to Database"));
 
-fastify.register(watchlistRoutes, { prefix: "/api/watchlists" });
+fastify.register(postRoutes, { prefix: "/api/posts" });
 fastify.register(userRoutes, { prefix: "/api/users" });
 /* Socket.io */
 
