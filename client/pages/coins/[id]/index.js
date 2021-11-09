@@ -45,7 +45,9 @@ function index({ props }) {
         },
       });
       setPopUp(true);
-      setTimeout(() => setPopUp(false), 2500);
+      setTimeout(() => {
+        setPopUp(false), setWatchlistName("");
+      }, 2500);
       console.log(`${watchlistName} created!`);
     } catch (error) {
       console.log(error);
@@ -107,12 +109,54 @@ function index({ props }) {
       </div>
     );
   }
-  if (!userData || !coinData) {
+  if (!coinData) {
     return (
       <div className="flex flex-col w-full min-h-screen">
         <Header />
         <div className="flex w-full items-center justify-center h-full">
           <p className="text-3xl font-light">Loading Coin Data...</p>
+        </div>
+      </div>
+    );
+  }
+  if (!userData) {
+    return (
+      <div className="flex flex-col w-full min-h-screen">
+        <Header />
+        <div className="flex flex-col w-full h-full  justify-center items-center">
+          <div className="flex py-10">
+            <img src={coinData.image?.large} alt="currency logo" />
+          </div>
+        </div>
+        <div className="flex flex-col w-5/6 self-center bg-gray-100 rounded p-5">
+          <p className="flex text-lg font-light">
+            Name:&nbsp;{" "}
+            <p className="text-green-400 text-lg font-normal">
+              {coinData.name}
+            </p>
+          </p>
+          <p className="flex text-lg font-light">
+            Symbol:&nbsp; <p className="text-lg">({coinData.symbol})</p>
+          </p>
+          <p className="flex text-lg font-light">
+            Community Score:&nbsp;{" "}
+            <p className="text-lg">{coinData.community_score}</p>
+          </p>
+          <p className="flex text-lg font-light">
+            Current Price: &nbsp;
+            <p className="flex font-normal">
+              {Intl.NumberFormat("en-us", {
+                style: "currency",
+                currency: "USD",
+              }).format(coinData.market_data.current_price.usd)}
+            </p>
+          </p>
+          <p className="flex text-lg font-light ">
+            Description: &nbsp;
+            {coinData?.description?.en
+              ? coinData?.description?.en
+              : "no description availible"}
+          </p>
         </div>
       </div>
     );
@@ -158,6 +202,7 @@ function index({ props }) {
               className="bg-gray-200 flex w-64 rounded px-1 font-light outline-none text-xl py-1"
               placeholder="watchlist name"
               type="text"
+              value={watchlistName}
               onChange={(e) => setWatchlistName(e.target.value)}
             />
             <div className="flex">
@@ -181,7 +226,7 @@ function index({ props }) {
               {userData?.watchlists.map((coin) => {
                 return (
                   <>
-                    <option key={coin.id} value={coin.watchlistName}>
+                    <option key={coin._id} value={coin.watchlistName}>
                       {coin.watchlistName}
                     </option>
                     );

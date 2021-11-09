@@ -9,7 +9,7 @@ import WatchlistContainer from "../../../components/WatchlistContainer";
 import Header from "../../../components/Header";
 import Post from "../../../components/Post";
 import NewPost from "../../../components/NewPost";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Delete from "@mui/icons-material/Delete";
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 function index() {
@@ -71,15 +71,20 @@ function index() {
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Header />
-      <div className="flex w-full items-center justify-between">
-        <h4 className="text-2xl font-light m-5">{fullName}'s Watchlists:</h4>
-      </div>
 
       <div className="flex w-full justify-center">
-        <WatchlistContainer />
+        <WatchlistContainer username={fullName} />
       </div>
       <div className="flex flex-col w-full items-center">
-        <h2>My Posts</h2>
+        <h2 className="text-2xl font-thin">
+          My Posts (
+          {
+            listOfPosts.filter((p) => {
+              return p.postAuthor === session?.id;
+            }).length
+          }
+          )
+        </h2>
         <div className="flex w-3/5 justify-center py-1">
           <NewPost />
         </div>
@@ -93,41 +98,55 @@ function index() {
               .reverse()
               .map((i) => {
                 return (
-                  <motion.div
-                    initial={{ x: 0, y: "100vh", opacity: 0 }}
-                    animate={{
-                      x: 0,
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ x: 0, y: "-20vh", opacity: 0 }}
+                      animate={{
+                        x: 0,
+                        y: 0,
+                        opacity: 1,
+                        transition: {
+                          type: "spring",
+                          damping: 10,
+                          mass: 0.4,
+                          stiffness: 100,
+                        },
+                      }}
+                      exit={{
+                        x: 0,
+                        y: -100,
+                        opacity: 0,
                         damping: 10,
                         mass: 0.4,
                         stiffness: 100,
-                      },
-                    }}
-                    exit={{ x: 0, y: 0, opacity: 0 }}
-                    className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
-                  >
-                    <img
-                      src={session?.user?.image}
-                      className="flex w-12 h-12 rounded-full"
-                    />
-                    <div className="w-full px-3">
-                      <div className="flex w-full justify-between">
-                        <p>{fullName}</p>
-                        <p>
-                          {new Date(i.createdAt).toISOString().substring(0, 10)}
-                        </p>
+                      }}
+                      className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
+                    >
+                      <img
+                        src={session?.user?.image}
+                        className="flex w-12 h-12 rounded-full"
+                      />
+                      <div className="w-full px-3">
+                        <div className="flex w-full justify-between">
+                          <p>{fullName}</p>
+                          <p>
+                            {new Date(i.createdAt)
+                              .toISOString()
+                              .substring(0, 10)}
+                          </p>
+                        </div>
+                        <div className="flex w-full justify-between">
+                          <p>{i.postBody}</p>
+                          <button
+                            type="button"
+                            onClick={() => deletePost(i._id)}
+                          >
+                            <DeleteIcon />
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex w-full justify-between">
-                        <p>{i.postBody}</p>
-                        <button type="button" onClick={() => deletePost(i._id)}>
-                          <DeleteIcon />
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </AnimatePresence>
                 );
               })}
           </div>

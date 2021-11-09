@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 
 function NewPost() {
   const { data: session } = useSession();
-  const router = useRouter();
   const [postBody, setPostBody] = useState();
   const sendPost = async () => {
     try {
@@ -17,6 +15,7 @@ function NewPost() {
           postAuthor: session?.id,
         },
       });
+      setPostBody("");
     } catch (error) {
       console.log(error);
     }
@@ -24,6 +23,7 @@ function NewPost() {
   return (
     <div className="flex flex-col bg-gray-300 w-3/5 rounded p-2">
       <textarea
+        value={postBody}
         onChange={(e) => setPostBody(e.target.value)}
         className="flex w-full h-full bg-gray-100"
         type="text"
