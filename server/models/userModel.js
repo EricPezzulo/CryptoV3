@@ -21,7 +21,8 @@ const NameSchema = new mongoose.Schema({
 const UserSchema = new mongoose.Schema({
   name: [NameSchema],
   watchlists: [WatchlistSchema],
-  test: String,
+  followers: { type: Array }, // store user _id's
+  following: { type: Array }, // store user _id's
 });
 
 const User = mongoose.model("User", UserSchema);

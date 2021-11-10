@@ -11,7 +11,7 @@ function Post({ postBody, postAuthor, postCreated }) {
   const fullName = Object.values(data.name[0]).slice(0, -1).join("");
   const timestamp = new Date(postCreated).toISOString().substring(0, 10);
   return (
-    <div className="flex bg-gray-200 w-full justify-between p-2 rounded">
+    <div className="flex bg-gray-100 w-full justify-between p-2 rounded">
       <div className="flex w-full">
         <div className="w-12 h-12 rounded-full">
           <img

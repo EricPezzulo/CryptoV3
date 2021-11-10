@@ -71,7 +71,7 @@ function Header() {
                     animate="visable"
                     exit="exit"
                   >
-                    <Link href={`/users/${session._id}`}>
+                    <Link href={`/users/myprofile`}>
                       <p className="flex cursor-pointer border-b border-gray-300 hover:bg-gray-100 duration-150 px-5 py-2">
                         My Profile
                       </p>

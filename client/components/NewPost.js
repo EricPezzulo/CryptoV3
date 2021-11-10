@@ -21,11 +21,11 @@ function NewPost() {
     }
   };
   return (
-    <div className="flex flex-col bg-gray-300 w-3/5 rounded p-2">
+    <div className="flex flex-col bg-gray-100 w-3/5 rounded p-2">
       <textarea
         value={postBody}
         onChange={(e) => setPostBody(e.target.value)}
-        className="flex w-full h-full bg-gray-100"
+        className="flex w-full h-full rounded  p-1 outline-none"
         type="text"
       />
       <div className="flex w-full justify-end mt-2">

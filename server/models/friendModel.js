@@ -4,7 +4,11 @@ const FriendSchema = new mongoose.Schema(
   {
     name: { type: String },
     avatar: { type: String },
-    following: { type: Array },
+    following: {
+      type: Array,
+      name: String,
+      image: String,
+    },
     followers: { type: Array },
   },
 

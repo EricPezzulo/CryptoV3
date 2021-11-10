@@ -40,7 +40,7 @@ function WatchlistContainer({ username }) {
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">
       <div className="flex flex-col w-full absolute left-4">
         <p className="text-2xl font-thin">
-          {username}'s Watchlist's ({listOfCoins.length})
+          My Watchlist's ({listOfCoins.length})
         </p>
       </div>
       <div className="flex flex-wrap h-full justify-center p-3 mt-10 rounded-md">

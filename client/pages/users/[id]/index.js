@@ -1,99 +1,176 @@
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import CoinInUserProfile from "../../../components/CoinInUserProfile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-import WatchlistContainer from "../../../components/WatchlistContainer";
 import Header from "../../../components/Header";
-import Post from "../../../components/Post";
-import NewPost from "../../../components/NewPost";
 import { AnimatePresence, motion } from "framer-motion";
-import Delete from "@mui/icons-material/Delete";
+
+export async function getServerSideProps({ query }) {
+  const id = query;
+  console.log(id);
+  return {
+    props: { props: id },
+  };
+}
+
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
-function index() {
+function myprofile({ props }) {
+  //   console.log(props.id);
+  const userId = props.id;
+  const [followingID, setFollowingID] = useState(userId);
   const { data: session } = useSession();
-  const router = useRouter();
   const [listOfPosts, setListOfPosts] = useState([]);
 
   const { data: userData, userError } = useSWR(
-    `http://localhost:5000/api/users/${session?.id}`,
+    `http://localhost:5000/api/users/${userId}`,
     fetcher
   );
-  const { data: postData, postError } = useSWR(
-    `http://localhost:5000/api/posts/`,
-    fetcher
-  );
-  const deletePost = async (_id) => {
-    await axios({
-      url: `http://localhost:5000/api/posts/${_id}/delete`,
-      method: "DELETE",
-      data: {
-        _id,
-      },
-    });
-  };
+  const [following, setFollowing] = useState(null);
 
-  useEffect(() => {
-    axios
+  //   const { data: coinData, coinError } = useSWR(
+  //     `https://api.coingecko.com/api/v3/coins/${coinID}`,
+  //     fetcher
+  //   );
+
+  useEffect(async () => {
+    await axios
       .get(`http://localhost:5000/api/posts`)
       .then((res) => setListOfPosts(res.data));
-  }, [listOfPosts]);
 
-  if (userError || postError) return <div>failed</div>;
+    const checkFollow = async (userId) => {
+      const res = await axios.get(
+        `http://localhost:5000/api/users/${session?.id}/following`
+      );
+      if (res.data[0]?.following?.userID === userId) {
+        setFollowing(true);
+      } else {
+        setFollowing(false);
+      }
+    };
+
+    checkFollow();
+  }, [following]);
+
+  //   console.log(following);
+  const unfollow = async () => {
+    try {
+      const res = await axios({
+        url: `http://localhost:5000/api/users/${session?.id}/unfollow`,
+        method: "PUT",
+        data: {
+          userID: followingID,
+        },
+      });
+      setFollowing(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const follow = async () => {
+    try {
+      const res = await axios({
+        url: `http://localhost:5000/api/users/${session?.id}/follow`,
+        method: "PUT",
+        data: {
+          userID: followingID,
+          image: userData.image,
+        },
+      });
+      setFollowing(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (userError) return <div>failed</div>;
   if (!userData)
     return (
       <div className="flex flex-col min-h-screen w-full">
         <Header />
         <div className="flex w-full items-center justify-between">
           <h4 className="text-2xl font-light m-5">Loading Watchlists...</h4>
-          <div className="mr-3">
-            <button
-              className="flex bg-blue-600 px-2 py-1 rounded-md text-white"
-              onClick={() =>
-                signOut({ callbackUrl: `${window.location.origin}` })
-              }
-            >
-              Sign Out
-            </button>
-          </div>
         </div>
       </div>
     );
 
   const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
 
-  if (!postData) return <div>no posts</div>;
-  // console.log(postData);
-  // console.log(session);
-  // console.log(listOfPosts.data);
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Header />
 
-      <div className="flex w-full justify-center">
-        <WatchlistContainer username={fullName} />
+      <div className="flex w-32 h-32 mt-5 ml-5">
+        <img className="rounded-full" src={userData.image} />
+      </div>
+      <h2 className="text-2xl font-thin ml-10">{fullName}</h2>
+      <div className="flex ml-5">
+        {!following && (
+          <div>
+            <button
+              onClick={follow}
+              className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
+            >
+              Follow
+            </button>
+          </div>
+        )}
+        {following && (
+          <div>
+            <button
+              onClick={unfollow}
+              className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
+            >
+              Following
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="flex w-full justify-center ">
+        {/* <WatchlistContainer username={fullName} /> */}
+        <div className="flex-col p-5">
+          <h3 className="text-xl font-thin">{fullName}'s watchlists:</h3>
+          <div className="flex ">
+            {userData.watchlists.map((watchlist) => {
+              return (
+                <div
+                  className="flex flex-col w-44 bg-gray-100 rounded mx-2 p-2 shadow"
+                  key={watchlist._id}
+                >
+                  <p className="text-2xl font-thin">
+                    {watchlist.watchlistName}
+                  </p>
+                  {watchlist.coins[0].coin.map((i) => {
+                    return (
+                      <>
+                        <p className="text-xl font-thin bg-white my-1 rounded p-1 text-green-400">
+                          {i.coinID}
+                        </p>
+                      </>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
       <div className="flex flex-col w-full items-center">
         <h2 className="text-2xl font-thin">
-          My Posts (
+          {fullName}'s Posts (
           {
             listOfPosts.filter((p) => {
-              return p.postAuthor === session?.id;
+              return p.postAuthor === userData?._id;
             }).length
           }
           )
         </h2>
-        <div className="flex w-3/5 justify-center py-1">
-          <NewPost />
-        </div>
 
         <div className="bg-gray-100 flex w-2/4 rounded">
           <div className="flex flex-col w-full items-center min-h-54 max-h-96 overflow-auto p-2">
             {listOfPosts
               .filter((p) => {
-                return p.postAuthor === session?.id;
+                return p.postAuthor === userData?._id;
               })
               .reverse()
               .map((i) => {
@@ -123,7 +200,7 @@ function index() {
                       className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
                     >
                       <img
-                        src={session?.user?.image}
+                        src={userData?.image}
                         className="flex w-12 h-12 rounded-full"
                       />
                       <div className="w-full px-3">
@@ -137,12 +214,6 @@ function index() {
                         </div>
                         <div className="flex w-full justify-between">
                           <p>{i.postBody}</p>
-                          <button
-                            type="button"
-                            onClick={() => deletePost(i._id)}
-                          >
-                            <DeleteIcon />
-                          </button>
                         </div>
                       </div>
                     </motion.div>
@@ -151,9 +222,12 @@ function index() {
               })}
           </div>
         </div>
+        <div className="flex h-full w-full items-center justify-center">
+          {/* <FriendsDock sessionID={session?.id} userdata={userData} /> */}
+        </div>
       </div>
     </div>
   );
 }
 
-export default index;
+export default myprofile;

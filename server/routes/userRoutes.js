@@ -1,4 +1,5 @@
 import { calculateObjectSize } from "bson";
+import { ConnectionPoolMonitoringEvent } from "mongodb";
 import User from "../models/userModel.js";
 
 const userRoutes = async (fastify, opts, done) => {
@@ -21,6 +22,26 @@ const userRoutes = async (fastify, opts, done) => {
     }
   });
 
+  // Get followings:
+
+  fastify.get("/:id/following", async (request, reply) => {
+    try {
+      const { id } = request.params;
+      const user = await User.findById(id);
+      // console.log(user);
+      const followings = user.following;
+      // console.log(followings);
+      let followingList = [];
+      followings.map((following) => {
+        const { userID, name, image } = following;
+        followingList.push({ userID, name, image });
+      });
+      reply.status(200).send(followingList);
+    } catch (error) {
+      reply.status(500).send({ error: "could not find following" });
+    }
+  });
+
   fastify.post("/add", async (request, reply) => {
     try {
       const user = request.body;
@@ -40,6 +61,53 @@ const userRoutes = async (fastify, opts, done) => {
       reply.status(400);
     }
   });
+
+  // ***  follow a user *** //
+  fastify.put("/:id/follow", async (request, reply) => {
+    try {
+      const { id } = request.params;
+      const person = request.body;
+      let user = await User.findById(id);
+      user.following.push(person);
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        { following: user.following },
+        { new: true, useFindAndModify: false }
+      );
+      reply.status(201).send(updatedUser);
+    } catch (error) {
+      reply.status(500).send({ error: "could not follow user" });
+    }
+  });
+
+  // *** unfollow user *** ///
+  fastify.put("/:id/unfollow", async (request, reply) => {
+    try {
+      const { id } = request.params;
+      const { person } = request.body;
+      // console.log(person);
+      // get the user
+      let user = await User.findById(id);
+
+      // find the index of the user to remove
+      const userIndex = user.following.findIndex(
+        (user) => user.userID === person
+      );
+      // console.log(userIndex);
+      // remove the user from the following.
+      user.following.splice(userIndex, 1);
+
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        { following: user.following },
+        { new: true, useFindAndModify: false }
+      );
+      reply.status(201).send(updatedUser);
+    } catch (error) {
+      reply.status(501).send({ error: "could not unfollow user" });
+    }
+  });
+
   //***  create new watchlist  ***//
   fastify.put("/:id/addwatchlist", async (request, reply) => {
     try {
