@@ -13,6 +13,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Delete from "@mui/icons-material/Delete";
 import FriendsDock from "../../components/FriendsDock";
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
 function myprofile() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -59,10 +60,18 @@ function myprofile() {
   // userData.following.map((i) => console.log(i.userID));
   // console.log(session);
   // console.log(listOfPosts.data);
+  // console.log(userData);
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Header />
-
+      <div className="flex">
+        <div className="flex rounded-full shadow-2xl m-5 p-1">
+          <img
+            src={userData.image}
+            className="flex rounded-full object-contain w-32 h-32"
+          />
+        </div>
+      </div>
       <div className="flex w-full justify-center">
         <WatchlistContainer username={fullName} />
       </div>
@@ -143,7 +152,7 @@ function myprofile() {
           </div>
         </div>
         <div className="flex h-full w-full items-center justify-center">
-          <FriendsDock sessionID={session?.id} userdata={userData} />
+          <FriendsDock sessionID={session?.id} />
         </div>
       </div>
     </div>

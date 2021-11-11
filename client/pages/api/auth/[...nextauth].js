@@ -31,6 +31,7 @@ export default async function auth(req, res) {
     callbacks: {
       async session({ session, user }) {
         session.id = user.id;
+        session.following = user.following;
         return session;
       },
     },

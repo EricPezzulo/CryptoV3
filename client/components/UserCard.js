@@ -3,33 +3,25 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-
-function UserCard({ name, avatar, userID, sessionID }) {
+import Link from "next/link";
+function UserCard({ userData }) {
   const [following, setFollowing] = useState(null);
-  const [followingID, setFollowingID] = useState(userID);
-  const [dummyState, setDummyState] = useState("");
-  useEffect(() => {
-    const checkFollow = async (userID) => {
-      const res = await axios.get(
-        `http://localhost:5000/api/users/${sessionID}/following`
-      );
-      setDummyState(res.data[0]?.following?.userID);
-      if (dummyState === userID) {
-        setFollowing(true);
-      } else {
-        setFollowing(false);
-      }
-    };
-    checkFollow();
-  }, [following]);
-  console.log(dummyState);
+  const { data: session } = useSession();
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
+  console.log(userData);
+
+  // console.log(following);
+  // if (userData.id === dummyState)
+
   const unfollow = async () => {
     try {
       const res = await axios({
-        url: `http://localhost:5000/api/users/${sessionID}/unfollow`,
+        url: `http://localhost:5000/api/users/${session?.id}/unfollow`,
         method: "PUT",
         data: {
-          userID: followingID,
+          userID: session?.id,
         },
       });
       setFollowing(false);
@@ -40,10 +32,10 @@ function UserCard({ name, avatar, userID, sessionID }) {
   const follow = async () => {
     try {
       const res = await axios({
-        url: `http://localhost:5000/api/users/${sessionID}/follow`,
+        url: `http://localhost:5000/api/users/${session?.id}/follow`,
         method: "PUT",
         data: {
-          userID: followingID,
+          userID: session?.id,
           image: avatar,
         },
       });
@@ -54,17 +46,24 @@ function UserCard({ name, avatar, userID, sessionID }) {
   };
   return (
     <div className="flex px-2 h-14 w-full bg-gradient-to-tr from-gray-200 to-gray-100 rounded-lg justify-between items-center">
-      <div className="flex items-center justify-center ">
-        <div className="flex h-10 w-10">
-          <img className="flex rounded-full" src={avatar} alt="avatar" />
-        </div>
-        <div className="flex px-2">
-          <p className="text-xl font-light">{name}</p>
-        </div>
+      <Link href={`/users/${userData._id}`}>
+        <div className="flex items-center justify-center ">
+          <div className="flex h-10 w-10">
+            <img
+              className="flex rounded-full"
+              src={userData.image}
+              alt="avatar"
+            />
+          </div>
 
-        <p></p>
-      </div>
-      <div>
+          <div className="flex px-2">
+            <p className="text-xl font-light">
+              {Object.values(userData.name[0]).slice(0, -1).join("")}
+            </p>
+          </div>
+        </div>
+      </Link>
+      {/* <div>
         {following && (
           <button type="button" onClick={unfollow}>
             <HighlightOffIcon />
@@ -75,7 +74,7 @@ function UserCard({ name, avatar, userID, sessionID }) {
             <AddIcon />
           </button>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -16,7 +16,7 @@ function FriendsDock({ sessionID }) {
     };
     getUserData();
   }, [following]);
-
+  // console.log(following[0].userID);
   return (
     <div className="flex flex-col max-w-md h-full my-2 rounded">
       <h3 className="font-light text-lg">Following ({following.length})</h3>
@@ -28,8 +28,8 @@ function FriendsDock({ sessionID }) {
                 <Link href={`/users/${i.userID}`}>
                   <img
                     className="w-10 h-10 hover:cursor-pointer rounded-full object-cover"
-                    src={i.image}
-                    alt="avatar"
+                    src={i?.image}
+                    alt="pic"
                   />
                 </Link>
               </div>

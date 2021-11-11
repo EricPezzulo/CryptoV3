@@ -4,31 +4,24 @@ import { useEffect, useState } from "react";
 import UserCard from "../../components/UserCard";
 import Header from "../../components/Header";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+
 export async function getServerSideProps() {
-  const res = await fetch(`http://localhost:5000/api/users`);
-  const data = await res.json();
+  const users = await fetch(`http://localhost:5000/api/users`);
+  const data = await users.json();
   return {
-    props: { data: data },
+    props: { users: data.data },
   };
 }
 
-function users() {
+function users({ users }) {
+  const router = useRouter();
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
   const { data: session } = useSession();
-  const [listOfUsers, setListOfUsers] = useState([]);
-  useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const res = await axios({
-          url: `http://localhost:5000/api/users`,
-          method: "GET",
-        });
-        setListOfUsers(res.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUsers();
-  }, []);
+  const [listOfUsers, setListOfUsers] = useState(users);
+  const [following, setFollowing] = useState(null);
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -46,6 +39,7 @@ function users() {
                   avatar={user.image}
                   userID={user._id}
                   sessionID={session?.id}
+                  userData={user}
                 />
               </div>
             );

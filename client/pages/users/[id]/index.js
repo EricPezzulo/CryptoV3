@@ -5,54 +5,53 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import Header from "../../../components/Header";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/router";
 
-export async function getServerSideProps({ query }) {
-  const id = query;
-  console.log(id);
+export async function getServerSideProps(context) {
+  const res = await fetch(
+    `http://localhost:5000/api/users/${context.query.id}`
+  );
+  const userData = await res.json();
+  const posts = await fetch(`http://localhost:5000/api/posts`);
+  const userPosts = await posts.json();
+  const { id } = context.query;
+  // const isFollowing = await fetch(
+  //   `http://localhost:5000/api/users/${session.id}/following`
+  // );
+  // { headers }
+  // const followData = isFollowing.json();
   return {
-    props: { props: id },
+    props: { props: { id, userData, userPosts } },
   };
 }
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
-function myprofile({ props }) {
-  //   console.log(props.id);
+function index({ props }) {
   const userId = props.id;
   const [followingID, setFollowingID] = useState(userId);
   const { data: session } = useSession();
-  const [listOfPosts, setListOfPosts] = useState([]);
-
-  const { data: userData, userError } = useSWR(
-    `http://localhost:5000/api/users/${userId}`,
-    fetcher
-  );
   const [following, setFollowing] = useState(null);
+  const router = useRouter();
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
 
-  //   const { data: coinData, coinError } = useSWR(
-  //     `https://api.coingecko.com/api/v3/coins/${coinID}`,
-  //     fetcher
-  //   );
+  // useEffect(() => {
+  //   if (props.userData._id === session?.following[0].userID.id) {
+  //     console.log("following");
+  //     setFollowing(true);
+  //   } else {
+  //     console.log("not following");
+  //     console.log(props.userData._id);
+  //     console.log(session?.following[0].userID.id);
+  //     setFollowing(false);
+  //   }
+  // });
 
-  useEffect(async () => {
-    await axios
-      .get(`http://localhost:5000/api/posts`)
-      .then((res) => setListOfPosts(res.data));
+  // console.log(session?.following[0].userID);
+  // console.log(props.userData._id);
+  // console.log(props.userData);
 
-    const checkFollow = async (userId) => {
-      const res = await axios.get(
-        `http://localhost:5000/api/users/${session?.id}/following`
-      );
-      if (res.data[0]?.following?.userID === userId) {
-        setFollowing(true);
-      } else {
-        setFollowing(false);
-      }
-    };
-
-    checkFollow();
-  }, [following]);
-
-  //   console.log(following);
+  // console.log(props.userData.image);
   const unfollow = async () => {
     try {
       const res = await axios({
@@ -63,28 +62,29 @@ function myprofile({ props }) {
         },
       });
       setFollowing(false);
+      // refreshData();
     } catch (error) {
       console.log(error);
     }
   };
-  const follow = async () => {
+  const follow = async (userData) => {
     try {
       const res = await axios({
         url: `http://localhost:5000/api/users/${session?.id}/follow`,
         method: "PUT",
         data: {
           userID: followingID,
-          image: userData.image,
+          image: props.userData.image,
         },
       });
       setFollowing(true);
+      // refreshData();
     } catch (error) {
       console.log(error);
     }
   };
-
-  if (userError) return <div>failed</div>;
-  if (!userData)
+  console.log(props.userData);
+  if (!props.userData)
     return (
       <div className="flex flex-col min-h-screen w-full">
         <Header />
@@ -94,44 +94,46 @@ function myprofile({ props }) {
       </div>
     );
 
-  const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
+  const fullName = Object.values(props.userData.name[0]).slice(0, -1).join("");
 
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Header />
-
-      <div className="flex w-32 h-32 mt-5 ml-5">
-        <img className="rounded-full" src={userData.image} />
+      <div className="flex">
+        <div className="flex rounded-full  shadow-2xl m-5 p-1">
+          <img
+            src={props.userData.image}
+            className="flex rounded-full object-contain w-32 h-32"
+          />
+        </div>
       </div>
       <h2 className="text-2xl font-thin ml-10">{fullName}</h2>
       <div className="flex ml-5">
-        {!following && (
-          <div>
-            <button
-              onClick={follow}
-              className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
-            >
-              Follow
-            </button>
-          </div>
-        )}
-        {following && (
-          <div>
+        <div>
+          {following && (
             <button
               onClick={unfollow}
               className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
             >
               Following
             </button>
-          </div>
-        )}
+          )}
+          {!following && (
+            <button
+              onClick={follow}
+              className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
+            >
+              Follow
+            </button>
+          )}
+        </div>
       </div>
       <div className="flex w-full justify-center ">
         {/* <WatchlistContainer username={fullName} /> */}
         <div className="flex-col p-5">
           <h3 className="text-xl font-thin">{fullName}'s watchlists:</h3>
           <div className="flex ">
-            {userData.watchlists.map((watchlist) => {
+            {props.userData.watchlists.map((watchlist) => {
               return (
                 <div
                   className="flex flex-col w-44 bg-gray-100 rounded mx-2 p-2 shadow"
@@ -159,8 +161,8 @@ function myprofile({ props }) {
         <h2 className="text-2xl font-thin">
           {fullName}'s Posts (
           {
-            listOfPosts.filter((p) => {
-              return p.postAuthor === userData?._id;
+            props.userPosts.filter((p) => {
+              return p.postAuthor === props.userData?._id;
             }).length
           }
           )
@@ -168,9 +170,9 @@ function myprofile({ props }) {
 
         <div className="bg-gray-100 flex w-2/4 rounded">
           <div className="flex flex-col w-full items-center min-h-54 max-h-96 overflow-auto p-2">
-            {listOfPosts
+            {props.userPosts
               .filter((p) => {
-                return p.postAuthor === userData?._id;
+                return p.postAuthor === props.userData?._id;
               })
               .reverse()
               .map((i) => {
@@ -200,7 +202,7 @@ function myprofile({ props }) {
                       className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
                     >
                       <img
-                        src={userData?.image}
+                        src={props.userData?.image}
                         className="flex w-12 h-12 rounded-full"
                       />
                       <div className="w-full px-3">
@@ -230,4 +232,4 @@ function myprofile({ props }) {
   );
 }
 
-export default myprofile;
+export default index;

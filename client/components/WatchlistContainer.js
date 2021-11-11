@@ -47,7 +47,7 @@ function WatchlistContainer({ username }) {
         {listOfCoins.map((i) => (
           <div
             key={i._id}
-            className="flex flex-col bg-gray-100 p-2 rounded m-2 h-full w-64"
+            className="flex flex-col bg-gray-100 drop-shadow-lg p-2 rounded m-2 h-full w-64"
           >
             <p className="text-2xl font-light">{i.watchlistName}</p>
             {i.coins[0].coin.map((coin) => {
