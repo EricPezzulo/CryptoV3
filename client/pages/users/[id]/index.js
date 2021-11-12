@@ -1,12 +1,11 @@
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import Header from "../../../components/Header";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
-
+import Link from "next/link";
 export async function getServerSideProps(context) {
   const res = await fetch(
     `http://localhost:5000/api/users/${context.query.id}`
@@ -15,18 +14,13 @@ export async function getServerSideProps(context) {
   const posts = await fetch(`http://localhost:5000/api/posts`);
   const userPosts = await posts.json();
   const { id } = context.query;
-  // const isFollowing = await fetch(
-  //   `http://localhost:5000/api/users/${session.id}/following`
-  // );
-  // { headers }
-  // const followData = isFollowing.json();
   return {
-    props: { props: { id, userData, userPosts } },
+    props: { id, userData, userPosts },
   };
 }
 
-function index({ props }) {
-  const userId = props.id;
+function index({ id, userData, userPosts }) {
+  const userId = id;
   const [followingID, setFollowingID] = useState(userId);
   const { data: session } = useSession();
   const [following, setFollowing] = useState(null);
@@ -35,56 +29,59 @@ function index({ props }) {
     router.replace(router.asPath);
   };
 
-  // useEffect(() => {
-  //   if (props.userData._id === session?.following[0].userID.id) {
-  //     console.log("following");
-  //     setFollowing(true);
-  //   } else {
-  //     console.log("not following");
-  //     console.log(props.userData._id);
-  //     console.log(session?.following[0].userID.id);
-  //     setFollowing(false);
-  //   }
-  // });
+  useEffect(async () => {
+    const isFollowing = async () => {
+      const user = await session?.following.find((i) => i.userID === id);
+      console.log(user?.userID);
+      if (id === user?.userID) {
+        console.log("following");
+        setFollowing(true);
+      } else {
+        console.log("not following");
+        setFollowing(false);
+      }
+    };
 
-  // console.log(session?.following[0].userID);
-  // console.log(props.userData._id);
-  // console.log(props.userData);
+    isFollowing();
+  }, [following]);
 
-  // console.log(props.userData.image);
   const unfollow = async () => {
     try {
       const res = await axios({
         url: `http://localhost:5000/api/users/${session?.id}/unfollow`,
         method: "PUT",
         data: {
-          userID: followingID,
+          userID: id,
         },
       });
       setFollowing(false);
-      // refreshData();
+      refreshData();
     } catch (error) {
       console.log(error);
     }
   };
-  const follow = async (userData) => {
+  const follow = async () => {
     try {
       const res = await axios({
         url: `http://localhost:5000/api/users/${session?.id}/follow`,
         method: "PUT",
         data: {
-          userID: followingID,
-          image: props.userData.image,
+          userID: id,
+          image: userData.image,
         },
       });
       setFollowing(true);
-      // refreshData();
+      refreshData();
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(props.userData);
-  if (!props.userData)
+
+  // console.log(following);
+  // console.log(isFollowing);
+
+  // console.log(id);
+  if (!userData)
     return (
       <div className="flex flex-col min-h-screen w-full">
         <Header />
@@ -94,7 +91,7 @@ function index({ props }) {
       </div>
     );
 
-  const fullName = Object.values(props.userData.name[0]).slice(0, -1).join("");
+  const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
 
   return (
     <div className="flex flex-col min-h-screen w-full">
@@ -102,9 +99,30 @@ function index({ props }) {
       <div className="flex">
         <div className="flex rounded-full  shadow-2xl m-5 p-1">
           <img
-            src={props.userData.image}
+            src={userData.image}
             className="flex rounded-full object-contain w-32 h-32"
           />
+        </div>
+        <div className="flex mt-20  h-full items-center p-2">
+          <div className="">
+            <p className="text-xl font-light pr-3">
+              Following ({userData.following.length}):{" "}
+            </p>
+          </div>
+          <div className="flex h-16  items-center justify-center bg-gray-100 p-2 rounded-md shadow">
+            {userData.following.map((i) => {
+              return (
+                <div className="flex px-1">
+                  <Link href={`/users/${i.userID}`}>
+                    <img
+                      className="flex object-contain -10 h-10 rounded-full hover:cursor-pointer"
+                      src={i.image}
+                    />
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
       <h2 className="text-2xl font-thin ml-10">{fullName}</h2>
@@ -133,10 +151,10 @@ function index({ props }) {
         <div className="flex-col p-5">
           <h3 className="text-xl font-thin">{fullName}'s watchlists:</h3>
           <div className="flex ">
-            {props.userData.watchlists.map((watchlist) => {
+            {userData.watchlists.map((watchlist) => {
               return (
                 <div
-                  className="flex flex-col w-44 bg-gray-100 rounded mx-2 p-2 shadow"
+                  className="flex flex-col w-44 bg-gray-100 rounded mx-2 p-2 drop-shadow-md"
                   key={watchlist._id}
                 >
                   <p className="text-2xl font-thin">
@@ -161,18 +179,18 @@ function index({ props }) {
         <h2 className="text-2xl font-thin">
           {fullName}'s Posts (
           {
-            props.userPosts.filter((p) => {
-              return p.postAuthor === props.userData?._id;
+            userPosts.filter((p) => {
+              return p.postAuthor === userData?._id;
             }).length
           }
           )
         </h2>
 
-        <div className="bg-gray-100 flex w-2/4 rounded">
+        <div className="bg-gray-100 flex w-2/4 rounded drop-shadow-md">
           <div className="flex flex-col w-full items-center min-h-54 max-h-96 overflow-auto p-2">
-            {props.userPosts
+            {userPosts
               .filter((p) => {
-                return p.postAuthor === props.userData?._id;
+                return p.postAuthor === userData?._id;
               })
               .reverse()
               .map((i) => {
@@ -202,7 +220,7 @@ function index({ props }) {
                       className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
                     >
                       <img
-                        src={props.userData?.image}
+                        src={userData?.image}
                         className="flex w-12 h-12 rounded-full"
                       />
                       <div className="w-full px-3">

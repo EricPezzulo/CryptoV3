@@ -66,7 +66,7 @@ function index({ props }) {
       setSuccessMessage(true);
       setTimeout(() => setSuccessMessage(false), 2500);
 
-      console.log(successMessage);
+      // console.log(successMessage);
     } catch (error) {
       console.log(error);
     }

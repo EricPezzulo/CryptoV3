@@ -1,22 +1,18 @@
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import CoinInUserProfile from "../../components/CoinInUserProfile";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import WatchlistContainer from "../../components/WatchlistContainer";
 import Header from "../../components/Header";
-import Post from "../../components/Post";
 import NewPost from "../../components/NewPost";
 import { AnimatePresence, motion } from "framer-motion";
-import Delete from "@mui/icons-material/Delete";
 import FriendsDock from "../../components/FriendsDock";
+import { useSession } from "next-auth/react";
+
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 function myprofile() {
   const { data: session } = useSession();
-  const router = useRouter();
   const [listOfPosts, setListOfPosts] = useState([]);
   const { data: userData, userError } = useSWR(
     `http://localhost:5000/api/users/${session?.id}`,
@@ -38,11 +34,25 @@ function myprofile() {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/posts`)
-      .then((res) => setListOfPosts(res.data));
+    const getPostData = async () => {
+      try {
+        await axios
+          .get("http://localhost:5000/api/posts")
+          .then((res) => setListOfPosts(res.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPostData();
   }, [listOfPosts]);
 
+  // useEffect(async () => {
+  //   await axios
+  //     .get(`http://localhost:5000/api/posts`)
+  //     .then((res) => setListOfPosts(res.data));
+  // }, [listOfPosts]);
+
+  // console.log(listOfPosts);
   if (userError || postError) return <div>failed</div>;
   if (!userData)
     return (

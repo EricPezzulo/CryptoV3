@@ -19,29 +19,36 @@ fastify.register(fastifyCors, {
 });
 
 /* Connect to MongoDB with Mongoose */
-
-mongoose
-  .connect(uri)
-  .then(() => console.log("Connected with Mongoose"))
-  .catch(() => console.log("Could not connect to Database"));
+const dbConnect = () => {
+  try {
+    mongoose.connect(uri).then(() => console.log("Connected with Mongoose"));
+  } catch (error) {
+    console.log("Could not connect to Mongo");
+  }
+};
+dbConnect();
+// mongoose
+//   .connect(uri)
+//   .then(() => console.log("Connected with Mongoose"))
+//   .catch(() => console.log("Could not connect to Database"));
 
 fastify.register(postRoutes, { prefix: "/api/posts" });
 fastify.register(userRoutes, { prefix: "/api/users" });
 /* Socket.io */
 
-fastify.register(fastifyIO, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  },
-});
+// fastify.register(fastifyIO, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+//   },
+// });
 
-fastify.ready().then(() => {
-  // we need to wait for the server to be ready, else `server.io` is undefined
-  fastify.io.on("connection", (socket) => {
-    // ...
-  });
-});
+// fastify.ready().then(() => {
+//   // we need to wait for the server to be ready, else `server.io` is undefined
+//   fastify.io.on("connection", (socket) => {
+//     // ...
+//   });
+// });
 
 /* Start Fastify Server Asyncronously */
 

@@ -4,12 +4,10 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import clientPromise from "../../../utils/mongodb";
 import TwitterProvider from "next-auth/providers/twitter";
-// import { useRouter } from "next/dist/client/router";
 export default async function auth(req, res) {
-  // const router = useRouter().push("/");
   return await NextAuth(req, res, {
     adapter: MongoDBAdapter({
-      db: (await clientPromise).db("watchlists"),
+      db: (await clientPromise).db("CryptoV3"),
     }),
     providers: [
       GithubProvider({
