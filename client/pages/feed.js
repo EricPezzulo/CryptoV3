@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import axios from "axios";
 import Post from "../components/Post";
@@ -9,10 +9,31 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const apiEndpoint = `http://localhost:5000/api/posts`;
 
-function feed() {
-  const { data, error } = useSWR(apiEndpoint, fetcher);
-  if (error) return <div>error</div>;
-  if (!data) return <div>loading</div>;
+// export async function getServerSideProps() {
+//   const res = await fetch(apiEndpoint);
+//   const data = await res.json();
+//   console.log(data);
+//   return {
+//     props: { data: data },
+//   };
+// }
+
+function feed({ data }) {
+  // const { data, error } = useSWR(apiEndpoint, fetcher);
+  // if (error) return <div>error</div>;
+
+  const [postData, setPostData] = useState([]);
+  useEffect(() => {
+    const getPosts = async () => {
+      const res = await fetch(apiEndpoint);
+      const data = await res.json();
+      setPostData(data);
+    };
+    getPosts();
+  }, [postData]);
+
+  if (!postData) return <div>loading</div>;
+
   return (
     <div>
       <Header />
@@ -23,7 +44,7 @@ function feed() {
         <NewPost />
       </div>
       <div className="flex flex-col items-center w-full">
-        {data.reverse().map((i) => {
+        {postData.reverse().map((i) => {
           return (
             <div key={i._id} className="flex w-3/5 my-2">
               <Post

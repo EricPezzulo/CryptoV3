@@ -23,13 +23,13 @@ function index({ id, userData, userPosts }) {
   const userId = id;
   const [followingID, setFollowingID] = useState(userId);
   const { data: session } = useSession();
-  const [following, setFollowing] = useState(null);
+  const [following, setFollowing] = useState();
   const router = useRouter();
   const refreshData = () => {
     router.replace(router.asPath);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     const isFollowing = async () => {
       const user = await session?.following.find((i) => i.userID === id);
       console.log(user?.userID);
@@ -97,19 +97,19 @@ function index({ id, userData, userPosts }) {
     <div className="flex flex-col min-h-screen w-full">
       <Header />
       <div className="flex">
-        <div className="flex rounded-full  shadow-2xl m-5 p-1">
+        <div className="flex rounded-full shadow-2xl m-5 p-1">
           <img
             src={userData.image}
             className="flex rounded-full object-contain w-32 h-32"
           />
         </div>
-        <div className="flex mt-20  h-full items-center p-2">
-          <div className="">
+        <div className="flex mt-20 h-full items-center p-2">
+          <div>
             <p className="text-xl font-light pr-3">
               Following ({userData.following.length}):{" "}
             </p>
           </div>
-          <div className="flex h-16  items-center justify-center bg-gray-100 p-2 rounded-md shadow">
+          <div className="flex h-16 items-center justify-center bg-gray-100 p-2 rounded-md shadow">
             {userData.following.map((i) => {
               return (
                 <div className="flex px-1">
@@ -162,11 +162,13 @@ function index({ id, userData, userPosts }) {
                   </p>
                   {watchlist.coins[0].coin.map((i) => {
                     return (
-                      <>
-                        <p className="text-xl font-thin bg-white my-1 rounded p-1 text-green-400">
-                          {i.coinID}
-                        </p>
-                      </>
+                      <div className="hover:cursor-pointer">
+                        <Link href={`/coins/${i.coinID}`}>
+                          <p className="text-xl font-thin bg-white my-1 rounded p-1 text-green-400 duration-100 hover:bg-gray-50">
+                            {i.coinID}
+                          </p>
+                        </Link>
+                      </div>
                     );
                   })}
                 </div>

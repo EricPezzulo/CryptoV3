@@ -28,7 +28,6 @@ function WatchlistContainer({ username }) {
     }
   };
   if (userError) return <div>failed</div>;
-  if (!userData) return <div>loading data...</div>;
 
   useEffect(() => {
     axios
@@ -36,6 +35,7 @@ function WatchlistContainer({ username }) {
       .then((res) => setListOfCoins(res.data.watchlists));
   }, [listOfCoins]);
 
+  if (!listOfCoins) return <div> loading </div>;
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">
       <div className="flex flex-col w-full absolute left-4">

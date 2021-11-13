@@ -17,9 +17,13 @@ function FriendsDock({ sessionID }) {
     getUserData();
   }, []);
   return (
-    <div className="flex flex-col max-w-md h-full my-2 rounded">
-      <h3 className="font-light text-lg">Following ({following.length})</h3>
-      <div className="flex w-full h-full bg-gray-100 overflow-x-auto justify-center items-center rounded-md p-3 ">
+    <div className="flex w-full h-full my-2 rounded items-center justify-center">
+      <div className="flex min-w-min pr-2">
+        <h3 className="flex font-light text-xl">
+          Following ({following.length}):{" "}
+        </h3>
+      </div>
+      <div className="flex min-w-min max-w-md h-16 bg-gray-100 overflow-x-auto justify-center items-center rounded-md p-3 shadow ml-1">
         {following.map((i) => {
           return (
             <div className="flex items-center justify-center w-full h-full">
@@ -32,7 +36,6 @@ function FriendsDock({ sessionID }) {
                   />
                 </Link>
               </div>
-              {/* <p>{i.image}</p> */}
             </div>
           );
         })}
