@@ -8,7 +8,7 @@ import NewPost from "../../components/NewPost";
 import { AnimatePresence, motion } from "framer-motion";
 import FriendsDock from "../../components/FriendsDock";
 import { useSession } from "next-auth/react";
-
+import Link from "next/link";
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 function myprofile() {
@@ -203,16 +203,16 @@ function myprofile() {
       </div>
     );
   return (
-    <div className="flex flex-col min-h-screen w-full">
+    <div>
       <Header />
-      <div className="flex w-full">
+      <div className="flex h-full items-center w-full">
         <div className="flex rounded-full m-5 p-1 drop-shadow-2xl bg-gray-100">
           <img
             src={userData.image}
             className="flex rounded-full object-contain w-32 h-32"
           />
         </div>
-        <div className="flex h-full items-center justify-center mt-20 ml-2">
+        <div className="flex h-full items-center justify-center ml-2">
           <FriendsDock sessionID={session?.id} />
         </div>
       </div>

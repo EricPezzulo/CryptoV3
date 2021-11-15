@@ -1,6 +1,5 @@
-import { getSession, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 import axios from "axios";
 import Header from "../../../components/Header";
 import { AnimatePresence, motion } from "framer-motion";
@@ -20,30 +19,33 @@ export async function getServerSideProps(context) {
 }
 
 function index({ id, userData, userPosts }) {
-  const userId = id;
-  const [followingID, setFollowingID] = useState(userId);
   const { data: session } = useSession();
   const [following, setFollowing] = useState();
   const router = useRouter();
   const refreshData = () => {
     router.replace(router.asPath);
   };
+  const [isMe, setIsMe] = useState();
+  const isFollowing = () => {
+    const user = userData?.followers.find((i) => i.userID === session?.id);
+    if (user) {
+      setFollowing(true);
+    } else {
+      setFollowing(false);
+    }
+  };
+  const findIsMe = async () => {
+    if (id === session?.id) {
+      setIsMe(true);
+    } else {
+      setIsMe(false);
+    }
+  };
 
   useEffect(() => {
-    const isFollowing = async () => {
-      const user = await session?.following.find((i) => i.userID === id);
-      console.log(user?.userID);
-      if (id === user?.userID) {
-        console.log("following");
-        setFollowing(true);
-      } else {
-        console.log("not following");
-        setFollowing(false);
-      }
-    };
-
     isFollowing();
-  }, [following]);
+    findIsMe();
+  });
 
   const unfollow = async () => {
     try {
@@ -51,10 +53,14 @@ function index({ id, userData, userPosts }) {
         url: `http://localhost:5000/api/users/${session?.id}/unfollow`,
         method: "PUT",
         data: {
-          userID: id,
+          followingUser: {
+            userID: id,
+          },
+          currentUser: {
+            userID: session?.id,
+          },
         },
       });
-      setFollowing(false);
       refreshData();
     } catch (error) {
       console.log(error);
@@ -66,21 +72,22 @@ function index({ id, userData, userPosts }) {
         url: `http://localhost:5000/api/users/${session?.id}/follow`,
         method: "PUT",
         data: {
-          userID: id,
-          image: userData.image,
+          followingUser: {
+            userID: id,
+            image: userData.image,
+          },
+          currentUser: {
+            userID: session?.id,
+            image: session?.user?.image,
+          },
         },
       });
-      setFollowing(true);
       refreshData();
     } catch (error) {
       console.log(error);
     }
   };
 
-  // console.log(following);
-  // console.log(isFollowing);
-
-  // console.log(id);
   if (!userData)
     return (
       <div className="flex flex-col min-h-screen w-full">
@@ -96,14 +103,14 @@ function index({ id, userData, userPosts }) {
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Header />
-      <div className="flex">
-        <div className="flex rounded-full shadow-2xl m-5 p-1">
+      <div className="flex items-center">
+        <div className="flex h-full rounded-full shadow-2xl m-5 p-1">
           <img
             src={userData.image}
             className="flex rounded-full object-contain w-32 h-32"
           />
         </div>
-        <div className="flex mt-20 h-full items-center p-2">
+        <div className="flex h-full items-center ml-4">
           <div>
             <p className="text-xl font-light pr-3">
               Following ({userData.following.length}):{" "}
@@ -123,33 +130,59 @@ function index({ id, userData, userPosts }) {
               );
             })}
           </div>
+          <div className="ml-2">
+            <p className="text-xl font-light pr-3">
+              Followers ({userData.followers.length}):{" "}
+            </p>
+          </div>
+          <div className="flex h-16 items-center justify-center bg-gray-100 p-2 rounded-md shadow">
+            {userData.followers.map((i) => {
+              return (
+                <div className="flex px-1">
+                  <Link href={`/users/${i.userID}`}>
+                    <img
+                      className="flex object-contain -10 h-10 rounded-full hover:cursor-pointer"
+                      src={i.image}
+                    />
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
       <h2 className="text-2xl font-thin ml-10">{fullName}</h2>
       <div className="flex ml-5">
-        <div>
-          {following && (
-            <button
-              onClick={unfollow}
-              className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
-            >
-              Following
-            </button>
-          )}
-          {!following && (
-            <button
-              onClick={follow}
-              className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
-            >
-              Follow
-            </button>
-          )}
-        </div>
+        {isMe && <p className="font-light">Your public profile view</p>}
+        {!isMe && (
+          <div>
+            {following && (
+              <button
+                type="submit"
+                onClick={unfollow}
+                className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
+              >
+                Following
+              </button>
+            )}
+            {!following && (
+              <button
+                type="submit"
+                onClick={follow}
+                className="bg-blue-400 px-2 py-1 rounded-md text-white font-light"
+              >
+                Follow
+              </button>
+            )}
+          </div>
+        )}
       </div>
       <div className="flex w-full justify-center ">
         {/* <WatchlistContainer username={fullName} /> */}
         <div className="flex-col p-5">
-          <h3 className="text-xl font-thin">{fullName}'s watchlists:</h3>
+          <h3 className="text-xl font-thin">
+            {fullName}'s Watchlists ({userData.watchlists.length}):
+          </h3>
           <div className="flex ">
             {userData.watchlists.map((watchlist) => {
               return (

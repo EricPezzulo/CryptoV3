@@ -6,7 +6,6 @@ function CoinCard({
   coinID,
   coinImage,
   coinPriceChange24Hr,
-  coinMarketCap,
   coinHigh24hr,
   coinLow24Hr,
   coinPrice,
@@ -26,7 +25,7 @@ function CoinCard({
         </div>
         <div className="flex w-full flex-col items-start justify-center h-full ">
           <div className="flex">
-            <p>PPC(24h):</p>
+            <p>PPC(24h):&nbsp;</p>
             <p
               className={
                 coinPriceChange24Hr > 0 ? "text-green-400" : "text-red-500"
@@ -35,13 +34,7 @@ function CoinCard({
               {coinPriceChange24Hr.toFixed(2)}%
             </p>
           </div>
-          {/* <p>
-            Market Cap:{" "}
-            {Intl.NumberFormat("en-us", {
-              style: "currency",
-              currency: "USD",
-            }).format(coinMarketCap)}
-          </p> */}
+
           <p>
             Price:{" "}
             {Intl.NumberFormat("en-us", {
@@ -51,8 +44,20 @@ function CoinCard({
           </p>
         </div>
         <div className="flex w-full flex-col h-full items-start justify-center">
-          <p>24H High: {coinHigh24hr}</p>
-          <p>24H Low: {coinLow24Hr}</p>
+          <p>
+            24H High:{" "}
+            {Intl.NumberFormat("en-us", {
+              style: "currency",
+              currency: "USD",
+            }).format(coinHigh24hr)}
+          </p>
+          <p>
+            24H Low:{" "}
+            {Intl.NumberFormat("en-us", {
+              style: "currency",
+              currency: "USD",
+            }).format(coinLow24Hr)}
+          </p>
         </div>
       </div>
     </div>

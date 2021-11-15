@@ -4,17 +4,8 @@ import ReactPaginate from "react-paginate";
 import CoinCard from "../components/CoinCard";
 import Link from "next/link";
 import Header from "../components/Header";
-import { getSession } from "next-auth/react";
 
-export const getServerSideProps = async (context) => {
-  return {
-    props: {
-      session: await getSession(context),
-    },
-  };
-};
-
-export default function Home({ session }) {
+export default function Home() {
   const [coinData, setCoinData] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [coinsPerPage, setCoinsPerPage] = useState(10);
@@ -29,7 +20,13 @@ export default function Home({ session }) {
     };
     getData();
   }, []);
-  console.log(session);
+
+  const pageCount = Math.ceil(coinData.length / coinsPerPage);
+
+  const pageChange = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
   const displayCoins = coinData
     .slice(pagesVisited, pagesVisited + coinsPerPage)
     .map((coin) => {
@@ -54,11 +51,53 @@ export default function Home({ session }) {
       );
     });
 
-  const pageCount = Math.ceil(coinData.length / coinsPerPage);
+  const loading = [];
+  for (let i = 0; i < 12; i++) {
+    loading.push(
+      <div className="flex w-full items-center justify-center p-8 bg-gray-200 animate-pulse rounded my-1"></div>
+    );
+  }
 
-  const pageChange = ({ selected }) => {
-    setPageNumber(selected);
-  };
+  if (!coinData)
+    return (
+      <div className="flex flex-col w-full items-center justify-between min-h-screen">
+        <Header />
+        <div className="flex flex-col w-full h-full justify-center items-center">
+          <div className="flex w-10/12 justify-center items-center rounded-md bg-gray-50">
+            <div className="flex flex-col w-full items-center justify-center p-2">
+              {loading}
+            </div>
+          </div>
+        </div>
+        <div className="relative bottom-0 mt-5 mb-5">
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            pageCount={pageCount}
+            onPageChange={pageChange}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={1}
+            // breakLabel={"..."}
+            breakClassName={"hidden"}
+            // breakLinkClassName={"flex"}
+            containerClassName={
+              "flex w-96 justify-evenly bg-gradient-to-r from-red-300 to-purple-300 h-12 rounded-full text-gray-100 items-center"
+            }
+            previousLinkClassName={
+              "flex items-center justify-center px-2 duration-200 hover:text-white "
+            }
+            nextLinkClassName={
+              "flex items-center justify-center px-2 duration-200 hover:text-white "
+            }
+            disabledClassName={"flex"}
+            activeLinkClassName={
+              "flex w-8 h-8 rounded-full items-center justify-center border-blue-400 border-2 text-white"
+            }
+          />
+        </div>
+      </div>
+    );
+
   return (
     <div className="flex flex-col w-full items-center justify-between min-h-screen">
       <Header />

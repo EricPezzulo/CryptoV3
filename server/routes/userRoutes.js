@@ -66,15 +66,30 @@ const userRoutes = async (fastify, opts, done) => {
   fastify.put("/:id/follow", async (request, reply) => {
     try {
       const { id } = request.params;
-      const person = request.body;
+      const { currentUser } = request.body;
+      const { followingUser } = request.body;
+
+      // find current user and add new user to their followings
       let user = await User.findById(id);
-      user.following.push(person);
+      user.following.push(followingUser);
+
+      // find requested user and add current user to followers
+      let requestedUser = await User.findById(followingUser.userID);
+      requestedUser.followers.push(currentUser);
+
       const updatedUser = await User.findByIdAndUpdate(
         { _id: id },
         { following: user.following },
         { new: true, useFindAndModify: false }
       );
-      reply.status(201).send(updatedUser);
+
+      const updatedRequestedUser = await User.findByIdAndUpdate(
+        { _id: followingUser.userID },
+        { followers: requestedUser.followers },
+        { new: true, useFindAndModify: false }
+      );
+
+      reply.status(201).send({ updatedUser, updatedRequestedUser });
     } catch (error) {
       reply.status(500).send({ error: "could not follow user" });
     }
@@ -84,25 +99,34 @@ const userRoutes = async (fastify, opts, done) => {
   fastify.put("/:id/unfollow", async (request, reply) => {
     try {
       const { id } = request.params;
-      const { person } = request.body;
-      // console.log(person);
+      const { currentUser } = request.body;
+      const { followingUser } = request.body;
       // get the user
-      let user = await User.findById(id);
-
+      let user = await User.findById(currentUser.userID);
       // find the index of the user to remove
-      const userIndex = user.following.findIndex(
-        (user) => user.userID === person
-      );
-      // console.log(userIndex);
+      const userIndex = user.following.findIndex((user) => user.userID === id);
       // remove the user from the following.
       user.following.splice(userIndex, 1);
 
+      // find requested user and remove current user to followers
+      let requestedUser = await User.findById(followingUser.userID);
+      const unfollowIndex = requestedUser.followers.findIndex(
+        (user) => user.userID === currentUser.userID
+      );
+      requestedUser.followers.splice(unfollowIndex, 1);
+
       const updatedUser = await User.findByIdAndUpdate(
-        { _id: id },
+        { _id: currentUser.userID },
         { following: user.following },
         { new: true, useFindAndModify: false }
       );
-      reply.status(201).send(updatedUser);
+      const updatedUnfollow = await User.findByIdAndUpdate(
+        { _id: followingUser.userID },
+        { followers: requestedUser.followers },
+        { new: true, useFindAndModify: false }
+      );
+
+      reply.status(201).send({ updatedUser, updatedUnfollow });
     } catch (error) {
       reply.status(501).send({ error: "could not unfollow user" });
     }

@@ -151,7 +151,14 @@ function index({ props }) {
               }).format(coinData.market_data.current_price.usd)}
             </p>
           </p>
-          <p className="flex text-lg font-light ">
+          <p
+            dangerouslySetInnerHTML={{
+              __html: coinData?.description?.en
+                ? coinData?.description?.en
+                : "no desc",
+            }}
+            className="flex text-lg font-light "
+          >
             Description: &nbsp;
             {coinData?.description?.en
               ? coinData?.description?.en
@@ -190,12 +197,14 @@ function index({ props }) {
             }).format(coinData.market_data.current_price.usd)}
           </p>
         </p>
-        <p className="flex text-lg font-light ">
-          Description: &nbsp;
-          {coinData?.description?.en
-            ? coinData?.description?.en
-            : "no description availible"}
-        </p>
+        <p
+          className="flex flex-col text-lg font-light"
+          dangerouslySetInnerHTML={{
+            __html: coinData?.description?.en
+              ? coinData?.description?.en
+              : "no desc avalible",
+          }}
+        ></p>
         <div className="flex p-5 w-full items-center justify-between">
           <div className="flex items-center justify-between w-full">
             <input

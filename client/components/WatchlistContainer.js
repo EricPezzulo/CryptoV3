@@ -38,8 +38,8 @@ function WatchlistContainer({ username }) {
   if (!listOfCoins) return <div> loading </div>;
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">
-      <div className="flex flex-col w-full absolute left-4">
-        <p className="text-2xl font-thin">
+      <div className="flex flex-col w-full">
+        <p className="text-2xl font-thin flex absolute left-4">
           My Watchlist's ({listOfCoins.length})
         </p>
       </div>

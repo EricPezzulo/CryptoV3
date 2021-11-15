@@ -1,27 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import axios from "axios";
 import Post from "../components/Post";
-import useSWR from "swr";
 import NewPost from "../components/NewPost";
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
+import { motion } from "framer-motion";
 const apiEndpoint = `http://localhost:5000/api/posts`;
 
-// export async function getServerSideProps() {
-//   const res = await fetch(apiEndpoint);
-//   const data = await res.json();
-//   console.log(data);
-//   return {
-//     props: { data: data },
-//   };
-// }
-
-function feed({ data }) {
-  // const { data, error } = useSWR(apiEndpoint, fetcher);
-  // if (error) return <div>error</div>;
-
+function feed() {
   const [postData, setPostData] = useState([]);
   useEffect(() => {
     const getPosts = async () => {
@@ -46,13 +30,36 @@ function feed({ data }) {
       <div className="flex flex-col items-center w-full">
         {postData.reverse().map((i) => {
           return (
-            <div key={i._id} className="flex w-3/5 my-2">
+            <motion.div
+              initial={{ x: 0, y: -20, opacity: 0 }}
+              animate={{
+                x: 0,
+                y: 0,
+                opacity: 1,
+                transition: {
+                  type: "spring",
+                  damping: 10,
+                  mass: 0.4,
+                  stiffness: 100,
+                },
+              }}
+              exit={{
+                x: 0,
+                y: -100,
+                opacity: 0,
+                damping: 10,
+                mass: 0.4,
+                stiffness: 100,
+              }}
+              key={i._id}
+              className="flex w-3/5 my-2"
+            >
               <Post
                 postBody={i.postBody}
                 postCreated={i.createdAt}
                 postAuthor={i.postAuthor}
               />
-            </div>
+            </motion.div>
           );
         })}
       </div>
