@@ -1,33 +1,32 @@
 import React from "react";
 import useSWR from "swr";
 import Link from "next/link";
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import { fetcher, nameConverter } from "../utils/helpers";
+
 function Post({ postBody, postAuthor, postCreated }) {
   const apiEndpoint = `http://localhost:5000/api/users/${postAuthor}`;
   const { data, error } = useSWR(apiEndpoint, fetcher);
 
   if (error) return <div>failed</div>;
   if (!data) return <div>loading</div>;
-  const fullName = Object.values(data.name[0]).slice(0, -1).join("");
+  const fullName = nameConverter(data);
   const timestamp = new Date(postCreated).toISOString().substring(0, 10);
   return (
-    <div className="flex bg-gray-100 w-full justify-between p-2 rounded cursor-pointer hover:bg-gray-200">
+    <div className="flex bg-Eerie-Black-dark w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100">
       <Link href={`/users/${postAuthor}`}>
         <div className="flex w-full">
-          <div className="w-12 h-12 rounded-full">
-            <img
-              className="flex rounded-full w-12 h-12"
-              src={data.image}
-              alt="avatar"
-            />
-          </div>
+          <img
+            className="flex w-12 h-12 rounded-full"
+            src={data.image}
+            alt="avatar"
+          />
           <div className="flex w-full flex-col">
             <div className="flex w-full justify-between px-2">
-              <p>{fullName}</p>
-              <p className="font-light text-gray-600">{timestamp}</p>
+              <p className="text-white font-semibold">{fullName}</p>
+              <p className="font-light text-white">{timestamp}</p>
             </div>
             <div className="flex px-2">
-              <p>{postBody}</p>
+              <p className="text-white font-light">{postBody}</p>
             </div>
           </div>
         </div>

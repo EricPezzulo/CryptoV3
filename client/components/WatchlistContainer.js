@@ -2,10 +2,10 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
+import { fetcher } from "../utils/helpers";
 import CoinInUserProfile from "./CoinInUserProfile";
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-function WatchlistContainer({ username }) {
+function WatchlistContainer() {
   const { data: session } = useSession();
   const [listOfCoins, setListOfCoins] = useState([]);
 
@@ -35,6 +35,7 @@ function WatchlistContainer({ username }) {
       .then((res) => setListOfCoins(res.data.watchlists));
   }, [listOfCoins]);
 
+  console.log(listOfCoins);
   if (!listOfCoins) return <div> loading </div>;
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">

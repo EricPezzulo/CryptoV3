@@ -4,8 +4,8 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
+import { fetcher } from "../utils/helpers";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 function CoinInUserProfile({ coinID, watchlistName }) {
   const { data: session } = useSession();
   const { data, error } = useSWR(

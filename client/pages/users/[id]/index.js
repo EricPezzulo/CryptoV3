@@ -5,6 +5,7 @@ import Header from "../../../components/Header";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { nameConverter } from "../../../utils/helpers";
 export async function getServerSideProps(context) {
   const res = await fetch(
     `http://localhost:5000/api/users/${context.query.id}`
@@ -98,8 +99,8 @@ function index({ id, userData, userPosts }) {
       </div>
     );
 
-  const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
-
+  // const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
+  const fullName = nameConverter(userData);
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Header />

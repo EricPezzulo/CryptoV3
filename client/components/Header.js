@@ -47,7 +47,7 @@ function Header() {
   };
 
   return (
-    <div className="flex w-full z-100 items-center bg-gradient-to-r from-red-500 to-purple-400 h-12">
+    <div className="flex w-full z-100 items-center bg-Eerie-Black-dark h-12">
       <div className="flex w-full items-center justify-between mx-2">
         <Link href="/">
           <h1 className="text-white text-2xl font-thin hover:cursor-pointer">
@@ -88,7 +88,6 @@ function Header() {
                     </Link>
 
                     <p
-                      // type="button"
                       className="flex items-center justify-center h-full cursor-pointer border-gray-300 hover:bg-gray-100 duration-150 rounded-bl"
                       onClick={() =>
                         signOut({ callbackUrl: `${window.location.origin}` })

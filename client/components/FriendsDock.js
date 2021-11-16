@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
+import { fetcher } from "../utils/helpers";
 
 function FriendsDock({ sessionID }) {
   const [following, setFollowing] = useState([]);
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data: userData, userError } = useSWR(
     `http://localhost:5000/api/users/${sessionID}`,
     fetcher

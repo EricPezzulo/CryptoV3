@@ -168,29 +168,31 @@ function index({ props }) {
       </div>
     );
   }
+
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    <div className="flex flex-col w-full min-h-screen bg-Eerie-Black">
       <Header />
-      <div className="flex flex-col w-full h-full  justify-center items-center">
+      <div className="flex flex-col w-full h-full justify-center items-center">
         <div className="flex py-10">
           <img src={coinData.image?.large} alt="currency logo" />
         </div>
       </div>
-      <div className="flex flex-col w-5/6 self-center bg-gray-100 rounded p-5">
-        <p className="flex text-lg font-light">
+      <div className="flex flex-col w-full sm:w-5/6 self-center sm:bg-Jet-Gray rounded p-5">
+        <p className="flex text-lg font-light text-white">
           Name:&nbsp;{" "}
           <p className="text-green-400 text-lg font-normal">{coinData.name}</p>
         </p>
-        <p className="flex text-lg font-light">
-          Symbol:&nbsp; <p className="text-lg">({coinData.symbol})</p>
+        <p className="flex text-lg font-light text-white">
+          Symbol:&nbsp;{" "}
+          <p className="text-lg text-white">({coinData.symbol})</p>
         </p>
-        <p className="flex text-lg font-light">
+        <p className="flex text-lg font-light text-white">
           Community Score:&nbsp;{" "}
-          <p className="text-lg">{coinData.community_score}</p>
+          <p className="text-lg text-white">{coinData.community_score}</p>
         </p>
-        <p className="flex text-lg font-light">
+        <p className="flex text-lg font-light text-white">
           Current Price: &nbsp;
-          <p className="flex font-normal">
+          <p className="flex font-normal text-white">
             {Intl.NumberFormat("en-us", {
               style: "currency",
               currency: "USD",
@@ -198,7 +200,7 @@ function index({ props }) {
           </p>
         </p>
         <p
-          className="flex flex-col text-lg font-light"
+          className="flex flex-col text-lg font-light text-white"
           dangerouslySetInnerHTML={{
             __html: coinData?.description?.en
               ? coinData?.description?.en
@@ -206,29 +208,28 @@ function index({ props }) {
           }}
         ></p>
         <div className="flex p-5 w-full items-center justify-between">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex flex-col sm:flex-row items-center justify-between w-full">
             <input
-              className="bg-gray-200 flex w-64 rounded px-1 font-light outline-none text-xl py-1"
-              placeholder="watchlist name"
+              className="bg-gray-200 flex rounded px-1 font-light outline-none text-xl py-1 w-full sm:max-w-max "
+              placeholder="Watchlist Name"
               type="text"
               value={watchlistName}
               onChange={(e) => setWatchlistName(e.target.value)}
             />
-            <div className="flex">
-              <button
-                type="button"
-                onClick={createNewWatchlist}
-                className="text-xl bg-blue-400 flex rounded px-2 py-1 text-white font-light"
-              >
-                Create New Watchlist
-              </button>
-            </div>
+
+            <button
+              type="button"
+              onClick={createNewWatchlist}
+              className="flex text-xl w-full sm:max-w-max my-2 sm:my-0 bg-blue-400 justify-center rounded px-2 py-1 text-white font-light"
+            >
+              Create New Watchlist
+            </button>
           </div>
         </div>
-        <div className="flex flex-col p-5">
-          <div className="flex w-full justify-between">
+        <div className="flex flex-col p-5 items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-center w-full justify-between">
             <select
-              className="flex rounded"
+              className="flex rounded text-xl py-1 w-full sm:max-w-max "
               onChange={(e) => setSelectWatchlist(e.target.value)}
             >
               <option>--Choose Watchlist--</option>
@@ -238,7 +239,6 @@ function index({ props }) {
                     <option key={coin._id} value={coin.watchlistName}>
                       {coin.watchlistName}
                     </option>
-                    );
                   </>
                 );
               })}
@@ -246,7 +246,7 @@ function index({ props }) {
             <button
               type="button"
               onClick={addCoinToWatchlist}
-              className="text-xl font-light bg-blue-400 text-white px-2 py-1 rounded"
+              className="text-xl font-light bg-blue-400 text-white px-2 py-1 rounded w-full sm:max-w-max  my-2 sm:my-0"
             >
               Add to Watchlist
             </button>
@@ -258,12 +258,12 @@ function index({ props }) {
                   initial="hidden"
                   animate="visable"
                   exit="exit"
-                  className={`flex absolute top-5 right-5 bg-gray-100 items-center h-10 justify-between rounded`}
+                  className={`flex absolute top-5 sm:right-5 bg-Davys-Gray items-center h-10 justify-between rounded`}
                 >
                   <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
                     <EmojiFlagsIcon className="text-white" />
                   </div>
-                  <p className="flex text-xl font-light px-2">
+                  <p className="flex text-xl font-light px-2 text-white">
                     Created new watchlist:
                     <p className="text-green-400">&nbsp;{watchlistName}</p>!
                   </p>
@@ -272,7 +272,7 @@ function index({ props }) {
             </AnimatePresence>
           </div>
 
-          <div>
+          <div className="flex justify-center items-center w-full">
             <AnimatePresence>
               {successMessage && (
                 <motion.div
@@ -280,7 +280,7 @@ function index({ props }) {
                   initial="hidden"
                   animate="visable"
                   exit="exit"
-                  className={`flex absolute top-5 right-5 bg-gray-100 items-center h-10 justify-between rounded`}
+                  className={`flex absolute top-5 sm:right-5 bg-Davys-Gray items-center h-10 justify-between rounded`}
                 >
                   <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
                     <EmojiFlagsIcon className="text-white" />

@@ -19,12 +19,12 @@ function feed() {
   if (!postData) return <div>loading</div>;
 
   return (
-    <div>
+    <div className="bg-Eerie-Black">
       <Header />
       <div className="flex flex-col items-center py-5">
-        <p className="text-4xl font-thin">POST FEED</p>
+        <p className="text-4xl font-thin text-white">POST FEED</p>
       </div>
-      <div className="flex w-full justify-center items-center">
+      <div className="flex w-full justify-center items-center my-2">
         <NewPost />
       </div>
       <div className="flex flex-col items-center w-full">
@@ -52,7 +52,7 @@ function feed() {
                 stiffness: 100,
               }}
               key={i._id}
-              className="flex w-3/5 my-2"
+              className="flex w-full sm:w-3/5 sm:my-1"
             >
               <Post
                 postBody={i.postBody}

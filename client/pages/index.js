@@ -31,7 +31,12 @@ export default function Home() {
     .slice(pagesVisited, pagesVisited + coinsPerPage)
     .map((coin) => {
       return (
-        <div className={"flex w-full p-2"} key={coin.id}>
+        <div
+          className={
+            "flex w-full sm:p-1 sm:border-none border-t border-Davys-Gray"
+          }
+          key={coin.id}
+        >
           <Link href={`/coins/${coin.id}`}>
             <div className="flex w-full">
               <CoinCard
@@ -69,48 +74,25 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="relative bottom-0 mt-5 mb-5">
-          <ReactPaginate
-            previousLabel={"Previous"}
-            nextLabel={"Next"}
-            pageCount={pageCount}
-            onPageChange={pageChange}
-            pageRangeDisplayed={1}
-            marginPagesDisplayed={1}
-            // breakLabel={"..."}
-            breakClassName={"hidden"}
-            // breakLinkClassName={"flex"}
-            containerClassName={
-              "flex w-96 justify-evenly bg-gradient-to-r from-red-300 to-purple-300 h-12 rounded-full text-gray-100 items-center"
-            }
-            previousLinkClassName={
-              "flex items-center justify-center px-2 duration-200 hover:text-white "
-            }
-            nextLinkClassName={
-              "flex items-center justify-center px-2 duration-200 hover:text-white "
-            }
-            disabledClassName={"flex"}
-            activeLinkClassName={
-              "flex w-8 h-8 rounded-full items-center justify-center border-blue-400 border-2 text-white"
-            }
-          />
-        </div>
       </div>
     );
 
   return (
-    <div className="flex flex-col w-full items-center justify-between min-h-screen">
+    <div className="flex flex-col w-full items-center justify-between min-h-screen bg-Eerie-Black">
       <Header />
       <div className="flex flex-col w-full h-full items-center">
-        <div className="flex  mt-5 w-10/12 justify-center items-center h-full rounded-md bg-gray-50 border-2 border-red-200">
+        <div className="flex flex-col sm:w-10/12 justify-center items-center h-full rounded-md bg-Jet-Gray w-full bg-transparent">
+          <div>
+            <p className="text-white font-thin text-2xl py-2 ">Top 100 Coins</p>
+          </div>
           <div className="flex flex-col w-full items-center justify-center">
-            <div className="flex flex-col w-full items-center justify-center p-4">
+            <div className="flex flex-col w-full items-center justify-center ">
               {displayCoins}
             </div>
           </div>
         </div>
       </div>
-      <div className="relative bottom-0 mt-5 mb-5">
+      <div className="relative bottom-0 mt-3 mb-3 flex w-full items-center justify-center">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
@@ -122,17 +104,17 @@ export default function Home() {
           breakClassName={"hidden"}
           // breakLinkClassName={"flex"}
           containerClassName={
-            "flex w-96 justify-evenly bg-gradient-to-r from-red-300 to-purple-300 h-12 rounded-full text-gray-100 items-center"
+            "flex w-full mx-10 justify-evenly rounded-full bg-Eerie-Black-dark p-1 text-gray-100 items-center sm:w-96 sm:h-12"
           }
           previousLinkClassName={
-            "flex items-center justify-center px-2 duration-200 hover:text-white "
+            "flex items-center justify-center px-2 duration-200 hover:text-white"
           }
           nextLinkClassName={
             "flex items-center justify-center px-2 duration-200 hover:text-white "
           }
           disabledClassName={"flex"}
           activeLinkClassName={
-            "flex w-8 h-8 rounded-full items-center justify-center border-blue-400 border-2 text-white"
+            "flex w-8 h-8 rounded-full items-center justify-center border-gray-400 border text-white"
           }
         />
       </div>
