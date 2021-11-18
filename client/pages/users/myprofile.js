@@ -51,53 +51,86 @@ function myprofile() {
   // if (userData || postData)
   if (!userData || !postData)
     return (
-      <div className="flex flex-col min-h-screen w-full">
+      <div className="bg-Eerie-Black min-h-screen">
         <Header />
-        <div className="flex">
-          <div className="flex rounded-full shadow-2xl m-5 p-1">
-            <div className="flex rounded-full object-contain w-32 h-32"></div>
-          </div>
-        </div>
-        <div className="flex w-full justify-center">
-          <div className="flex flex-wrap h-full justify-center p-3 mt-10 rounded-md">
-            <div className="flex flex-col items-center justify-center bg-gray-200 animate-pulse rounded-md w-44 h-60 px-3 mx-2 drop-shadow-md">
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-            </div>
-            <div className="flex flex-col items-center justify-center bg-gray-200 animate-pulse rounded-md w-44 h-60 px-3 mx-2 drop-shadow-md">
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-            </div>
-            <div className="flex flex-col items-center justify-center bg-gray-200 animate-pulse rounded-md w-44 h-60 px-3 mx-2 drop-shadow-md">
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-            </div>
-            <div className="flex flex-col items-center justify-center bg-gray-200 animate-pulse rounded-md w-44 h-60 px-3 mx-2 drop-shadow-md">
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-              <div className="flex bg-gray-100 pulse h-10 w-full rounded-md my-2"></div>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col w-full items-center">
-          <h2 className="text-2xl font-thin">My Posts</h2>
-          {/* <div className="flex w-3/5 justify-center py-1">
-            <NewPost />
-          </div> */}
-
-          <div className="bg-gray-200 flex w-2/4 h-64 rounded animate-pulse">
-            <div className="flex flex-col w-full shadow rounded items-center min-h-54 max-h-96 overflow-auto p-2"></div>
-          </div>
-          <div className="flex h-full w-full items-center justify-center">
+        <div className="flex h-full items-center w-full">
+          <div className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border bg-Davys-Gray animate-pulse border-gray-300" />
+          <div className="flex h-full items-center justify-center ml-2 pt-2 sm:pt-0">
             {/* <FriendsDock sessionID={session?.id} /> */}
-            <div className="flex bg-gray-200 animate-pulse w-44 h-14 rounded-md mt-5"></div>
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row">
+          <div className="flex w-full h-full justify-center">
+            <div className="flex-col items-center justify-center w-full h-full mx-10 px-2 my-2 rounded animate-pulse bg-Jet-Gray">
+              <div className="flex-col h-full w-full items-center justify-center">
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+              </div>
+            </div>
+          </div>
+          <div className="hidden sm:flex w-full h-full justify-center">
+            <div className="flex-col items-center justify-center w-full h-full mx-10 px-2 my-2 rounded animate-pulse bg-Jet-Gray">
+              <div className="flex-col h-full w-full items-center justify-center">
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+              </div>
+            </div>
+          </div>
+          <div className="hidden sm:flex w-full h-full justify-center">
+            <div className="flex-col items-center justify-center w-full h-full mx-10 px-2 my-2 rounded animate-pulse bg-Jet-Gray">
+              <div className="flex-col h-full w-full items-center justify-center">
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+                <div className="flex w-full h-12 bg-Davys-Gray my-2 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col w-full items-center">
+          <h2 className="text-2xl font-thin text-white">
+            My Posts (loading...)
+          </h2>
+          <div className=" flex w-full sm:w-3/4 md:w-2/4 sm:mt-5 sm:rounded pt-2">
+            <div className="flex w-full flex-col">
+              <div className="flex bg-Eerie-Black-dark flex-col w-full shadow sm:rounded items-center min-h-54 max-h-96 overflow-auto sm:p-2 sm:border-none border-t border-Davys-Gray">
+                <div className="flex bg-Jet-Gray w-full justify-between p-2 sm:rounded border-Davys-Gray sm:border-none duration-100 sm:my-1">
+                  <div>
+                    <div className="flex w-12 h-12 rounded-full bg-Davys-Gray animate-pulse"></div>
+                  </div>
+                  <div className="w-full px-3">
+                    <div className="flex w-full justify-between">
+                      <div className="w-8 h-3 rounded bg-Davys-Gray animate-pulse"></div>
+                      <div className="font-light w-16 h-3 bg-Davys-Gray rounded animate-pulse"></div>
+                    </div>
+                    <div className="flex w-full justify-between font-light">
+                      <div className="font-light w-16 h-3 bg-Davys-Gray animate-pulse my-2 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex bg-Eerie-Black-dark flex-col w-full shadow sm:rounded items-center min-h-54 max-h-96 overflow-auto sm:p-2 sm:border-none border-t border-Davys-Gray">
+                <div className="flex bg-Jet-Gray w-full justify-between p-2 sm:rounded border-Davys-Gray sm:border-none duration-100 sm:my-1">
+                  <div>
+                    <div className="flex w-12 h-12 rounded-full bg-Davys-Gray animate-pulse"></div>
+                  </div>
+                  <div className="w-full px-3">
+                    <div className="flex w-full justify-between">
+                      <div className="w-8 h-3 rounded bg-Davys-Gray animate-pulse"></div>
+                      <div className="font-light w-16 h-3 bg-Davys-Gray rounded animate-pulse"></div>
+                    </div>
+                    <div className="flex w-full justify-between font-light">
+                      <div className="font-light w-16 h-3 bg-Davys-Gray animate-pulse my-2 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -107,21 +140,22 @@ function myprofile() {
 
   if (!listOfPosts)
     return (
-      <div className="flex flex-col min-h-screen w-full">
+      <div className="bg-Eerie-Black min-h-screen">
         <Header />
-        <div className="flex">
-          <div className="flex rounded-full shadow-2xl m-5 p-1">
-            <img
-              src={userData.image}
-              className="flex rounded-full object-contain w-32 h-32"
-            />
+        <div className="flex h-full items-center w-full">
+          <img
+            src={userData.image}
+            className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
+          />
+          <div className="flex h-full items-center justify-center ml-2 pt-2 sm:pt-0">
+            <FriendsDock sessionID={session?.id} />
           </div>
         </div>
         <div className="flex w-full justify-center">
           <WatchlistContainer username={fullName} />
         </div>
         <div className="flex flex-col w-full items-center">
-          <h2 className="text-2xl font-thin">
+          <h2 className="text-2xl font-thin text-white">
             My Posts (
             {
               listOfPosts.filter((p) => {
@@ -130,13 +164,9 @@ function myprofile() {
             }
             )
           </h2>
-          <div className="flex w-3/5 justify-center py-1">
-            <NewPost />
-          </div>
-
-          <div className="bg-gray-200 h-64 animate-pulse flex w-2/4 rounded">
-            <div className="flex flex-col w-full shadow rounded items-center min-h-54 max-h-96 overflow-auto p-2">
-              {/* {listOfPosts
+          <div className=" flex w-full sm:w-3/4 md:w-2/4 sm:mt-5 sm:rounded pt-2">
+            <div className="flex bg-Eerie-Black-dark flex-col w-full shadow sm:rounded items-center min-h-54 max-h-96 overflow-auto sm:p-2">
+              {listOfPosts
                 .filter((p) => {
                   return p.postAuthor === session?.id;
                 })
@@ -165,7 +195,7 @@ function myprofile() {
                           mass: 0.4,
                           stiffness: 100,
                         }}
-                        className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
+                        className="flex bg-Jet-Gray w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100 text-white sm:my-1"
                       >
                         <img
                           src={session?.user?.image}
@@ -174,13 +204,13 @@ function myprofile() {
                         <div className="w-full px-3">
                           <div className="flex w-full justify-between">
                             <p>{fullName}</p>
-                            <p>
+                            <p className="font-light">
                               {new Date(i.createdAt)
                                 .toISOString()
                                 .substring(0, 10)}
                             </p>
                           </div>
-                          <div className="flex w-full justify-between">
+                          <div className="flex w-full justify-between font-light">
                             <p>{i.postBody}</p>
                             <button
                               type="button"
@@ -193,17 +223,14 @@ function myprofile() {
                       </motion.div>
                     </AnimatePresence>
                   );
-                })} */}
+                })}
             </div>
-          </div>
-          <div className="flex h-full w-full items-center justify-center">
-            <FriendsDock sessionID={session?.id} />
           </div>
         </div>
       </div>
     );
   return (
-    <div className="bg-Eerie-Black">
+    <div className="bg-Eerie-Black min-h-screen">
       <Header />
       <div className="flex h-full items-center w-full">
         <img
@@ -227,11 +254,7 @@ function myprofile() {
           }
           )
         </h2>
-        <div className="flex w-full sm:w-3/5 justify-center sm:py-1">
-          <NewPost />
-        </div>
-
-        <div className=" flex w-full sm:w-3/4 md:w-2/4 sm:mt-5 sm:rounded">
+        <div className=" flex w-full sm:w-3/4 md:w-2/4 sm:mt-5 sm:rounded pt-2">
           <div className="flex bg-Eerie-Black-dark flex-col w-full shadow sm:rounded items-center min-h-54 max-h-96 overflow-auto sm:p-2">
             {listOfPosts
               .filter((p) => {

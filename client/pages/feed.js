@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Post from "../components/Post";
 import NewPost from "../components/NewPost";
+import PublicIcon from "@mui/icons-material/Public";
+import AddReactionIcon from "@mui/icons-material/AddReaction";
 import { motion } from "framer-motion";
 const apiEndpoint = `http://localhost:5000/api/posts`;
 
@@ -19,10 +21,25 @@ function feed() {
   if (!postData) return <div>loading</div>;
 
   return (
-    <div className="bg-Eerie-Black">
+    <div className="bg-Eerie-Black min-h-screen">
       <Header />
-      <div className="flex flex-col items-center py-5">
-        <p className="text-4xl font-thin text-white">POST FEED</p>
+      <div className="flex w-full justify-center items-center py-5 text-Ghost-White sm:w-3/4 sm:mx-auto md:w-3/4">
+        <div className="flex-col h-full w-full">
+          <div>
+            <PublicIcon className="flex w-full h-10 hover:cursor-pointer" />
+          </div>
+          <div className="flex w-full justify-center items-center hover:cursor-pointer">
+            <p>Public</p>
+          </div>
+        </div>
+        <div className="flex-col h-full w-full">
+          <div>
+            <AddReactionIcon className="flex w-full h-10 hover:cursor-pointer" />
+          </div>
+          <div className="flex w-full justify-center items-center hover:cursor-pointer">
+            <p>Following</p>
+          </div>
+        </div>
       </div>
       <div className="flex w-full justify-center items-center sm:my-2">
         <NewPost />

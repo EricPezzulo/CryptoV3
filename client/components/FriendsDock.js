@@ -31,7 +31,7 @@ function FriendsDock({ sessionID }) {
         </p>
       </div>
       <div className="flex h-16 items-center justify-center bg-Jet-Gray px-2 rounded-md shadow">
-        {following.map((i) => {
+        {following.slice(0, 2).map((i) => {
           return (
             <div className="flex px-1 items-center justify-center">
               <Link href={`/users/${i.userID}`}>
@@ -51,7 +51,7 @@ function FriendsDock({ sessionID }) {
         </p>
       </div>
       <div className="flex h-16 items-center justify-center bg-Jet-Gray px-2 rounded-md shadow">
-        {userData.followers.map((i) => {
+        {userData.followers.slice(0, 2).map((i) => {
           return (
             <div className="flex px-1 items-center justify-center">
               <Link href={`/users/${i.userID}`}>

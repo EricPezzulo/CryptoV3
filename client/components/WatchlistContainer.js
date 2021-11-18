@@ -36,7 +36,7 @@ function WatchlistContainer() {
   }, [listOfCoins]);
 
   console.log(listOfCoins);
-  if (!listOfCoins) return <div> loading </div>;
+  if (!listOfCoins) return <div className="bg-Davys-Gray"> loading </div>;
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">
       <div className="flex flex-col w-full">
@@ -44,7 +44,7 @@ function WatchlistContainer() {
           My Watchlist's ({listOfCoins.length}):
         </p>
       </div>
-      <div className="flex flex-wrap h-full justify-center p-3 mt-10 rounded-md">
+      <div className="flex flex-wrap h-full justify-center p-3 mt-5 sm:mt-10 rounded-md">
         {listOfCoins.map((i) => (
           <div
             key={i._id}

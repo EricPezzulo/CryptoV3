@@ -120,7 +120,7 @@ function index({ id, userData, userPosts }) {
             className="flex h-16 items-center justify-center bg-Jet-Gray
            p-2 rounded-md shadow"
           >
-            {userData.following.map((i) => {
+            {userData.following.slice(0, 2).map((i) => {
               return (
                 <div className="flex px-1">
                   <Link href={`/users/${i.userID}`}>
@@ -139,12 +139,12 @@ function index({ id, userData, userPosts }) {
             </p>
           </div>
           <div className="flex h-16 items-center justify-center bg-Jet-Gray p-2 rounded-md shadow">
-            {userData.followers.map((i) => {
+            {userData.followers.slice(0, 2).map((i) => {
               return (
                 <div className="flex px-1">
                   <Link href={`/users/${i.userID}`}>
                     <img
-                      className="flex object-contain -10 h-10 rounded-full hover:cursor-pointer"
+                      className="flex object-contain w-10 h-10 rounded-full hover:cursor-pointer"
                       src={i.image}
                     />
                   </Link>
@@ -157,7 +157,7 @@ function index({ id, userData, userPosts }) {
       <h2 className="text-2xl font-thin ml-5 pb-2 sm:pb-0 sm:ml-10 text-white">
         {fullName}
       </h2>
-      <div className="flex ml-5">
+      <div className="flex ml-5 sm:ml-10">
         {isMe && (
           <p className="font-light text-Ghost-White">
             Your public profile view
@@ -220,7 +220,7 @@ function index({ id, userData, userPosts }) {
         </div>
       </div>
       <div className="flex flex-col w-full items-center">
-        <h2 className="text-xl text-white font-thin">
+        <h2 className="text-xl text-white font-thin pb-2">
           {fullName}'s Posts (
           {
             userPosts.filter((p) => {
