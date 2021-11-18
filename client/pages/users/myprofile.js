@@ -203,16 +203,14 @@ function myprofile() {
       </div>
     );
   return (
-    <div>
+    <div className="bg-Eerie-Black">
       <Header />
       <div className="flex h-full items-center w-full">
-        <div className="flex rounded-full m-5 p-1 drop-shadow-2xl bg-gray-100">
-          <img
-            src={userData.image}
-            className="flex rounded-full object-contain w-32 h-32"
-          />
-        </div>
-        <div className="flex h-full items-center justify-center ml-2">
+        <img
+          src={userData.image}
+          className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
+        />
+        <div className="flex h-full items-center justify-center ml-2 pt-2 sm:pt-0">
           <FriendsDock sessionID={session?.id} />
         </div>
       </div>
@@ -220,7 +218,7 @@ function myprofile() {
         <WatchlistContainer username={fullName} />
       </div>
       <div className="flex flex-col w-full items-center">
-        <h2 className="text-2xl font-thin">
+        <h2 className="text-2xl font-thin text-white">
           My Posts (
           {
             listOfPosts.filter((p) => {
@@ -229,12 +227,12 @@ function myprofile() {
           }
           )
         </h2>
-        <div className="flex w-3/5 justify-center py-1">
+        <div className="flex w-full sm:w-3/5 justify-center sm:py-1">
           <NewPost />
         </div>
 
-        <div className="bg-gray-100 flex w-2/4 mt-5 rounded">
-          <div className="flex flex-col w-full shadow rounded items-center min-h-54 max-h-96 overflow-auto p-2">
+        <div className=" flex w-full sm:w-3/4 md:w-2/4 sm:mt-5 sm:rounded">
+          <div className="flex bg-Eerie-Black-dark flex-col w-full shadow sm:rounded items-center min-h-54 max-h-96 overflow-auto sm:p-2">
             {listOfPosts
               .filter((p) => {
                 return p.postAuthor === session?.id;
@@ -264,7 +262,7 @@ function myprofile() {
                         mass: 0.4,
                         stiffness: 100,
                       }}
-                      className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
+                      className="flex bg-Jet-Gray w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100 text-white sm:my-1"
                     >
                       <img
                         src={session?.user?.image}
@@ -273,13 +271,13 @@ function myprofile() {
                       <div className="w-full px-3">
                         <div className="flex w-full justify-between">
                           <p>{fullName}</p>
-                          <p>
+                          <p className="font-light">
                             {new Date(i.createdAt)
                               .toISOString()
                               .substring(0, 10)}
                           </p>
                         </div>
-                        <div className="flex w-full justify-between">
+                        <div className="flex w-full justify-between font-light">
                           <p>{i.postBody}</p>
                           <button
                             type="button"

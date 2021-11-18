@@ -40,17 +40,17 @@ function WatchlistContainer() {
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">
       <div className="flex flex-col w-full">
-        <p className="text-2xl font-thin flex absolute left-4">
-          My Watchlist's ({listOfCoins.length})
+        <p className="text-2xl font-thin flex absolute left-4 text-white">
+          My Watchlist's ({listOfCoins.length}):
         </p>
       </div>
       <div className="flex flex-wrap h-full justify-center p-3 mt-10 rounded-md">
         {listOfCoins.map((i) => (
           <div
             key={i._id}
-            className="flex flex-col bg-gray-100 drop-shadow-lg p-2 rounded m-2 h-full w-64"
+            className="flex flex-col bg-Jet-Gray drop-shadow-lg p-2 rounded m-2 h-full w-64"
           >
-            <p className="text-2xl font-light">{i.watchlistName}</p>
+            <p className="text-2xl font-light text-white">{i.watchlistName}</p>
             {i.coins[0].coin.map((coin) => {
               return (
                 <div>
@@ -67,7 +67,7 @@ function WatchlistContainer() {
             <button
               type="button"
               onClick={() => deleteWatchlist(i.watchlistName)}
-              className="font-light hover:underline"
+              className="font-light hover:underline text-white"
             >
               Delete Watchlist
             </button>

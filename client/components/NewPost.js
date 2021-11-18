@@ -25,7 +25,7 @@ function NewPost() {
       <textarea
         value={postBody}
         onChange={(e) => setPostBody(e.target.value)}
-        className="flex w-full h-full rounded  p-1 outline-none text-white bg-Jet-Gray"
+        className="flex w-full h-full rounded p-1 outline-none text-white bg-Jet-Gray"
         type="text"
       />
       <div className="flex w-full justify-end mt-2">

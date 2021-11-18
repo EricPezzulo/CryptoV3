@@ -258,15 +258,18 @@ function index({ props }) {
                   initial="hidden"
                   animate="visable"
                   exit="exit"
-                  className={`flex absolute top-5 sm:right-5 bg-Davys-Gray items-center h-10 justify-between rounded`}
+                  className={`flex absolute top-5 sm:right-5 bg-Davys-Gray items-center min-h-max justify-between rounded`}
                 >
                   <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
                     <EmojiFlagsIcon className="text-white" />
                   </div>
-                  <p className="flex text-xl font-light px-2 text-white">
+                  <span className="flex text-xl font-light px-2 h-full text-white">
                     Created new watchlist:
-                    <p className="text-green-400">&nbsp;{watchlistName}</p>!
-                  </p>
+                    <span className="text-green-400">
+                      &nbsp;{watchlistName}
+                    </span>
+                    !
+                  </span>
                 </motion.div>
               )}
             </AnimatePresence>

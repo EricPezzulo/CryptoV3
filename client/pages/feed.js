@@ -24,7 +24,7 @@ function feed() {
       <div className="flex flex-col items-center py-5">
         <p className="text-4xl font-thin text-white">POST FEED</p>
       </div>
-      <div className="flex w-full justify-center items-center my-2">
+      <div className="flex w-full justify-center items-center sm:my-2">
         <NewPost />
       </div>
       <div className="flex flex-col items-center w-full">

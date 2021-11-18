@@ -50,17 +50,17 @@ function CoinInUserProfile({ coinID, watchlistName }) {
     );
 
   return (
-    <div className="flex flex-col bg-white items-center justify-center m-2 p-2 rounded hover:cursor-pointer">
+    <div className="flex flex-col bg-Davys-Gray items-center justify-center m-2 p-2 rounded hover:cursor-pointer">
       <div className="flex items-center justify-between w-full">
         {" "}
         <Link href={`/coins/${coinID}`}>
-          <div className="flex items-center">
+          <div className="flex items-baseline">
             <p className="text-xl text-green-400 pr-1 font-light">{coinID}</p>
-            <p className="font-light">({data.symbol})</p>{" "}
+            <p className="font-light text-white">({data.symbol})</p>{" "}
           </div>
         </Link>
         <button onClick={() => removeFromWatchlist(coinID)}>
-          <DeleteIcon className="text-gray-300 transition duration-200 hover:text-gray-400 hover:cursor-pointer" />
+          <DeleteIcon className="text-Ghost-White transition duration-200 hover:text-gray-400 hover:cursor-pointer" />
         </button>
       </div>
     </div>

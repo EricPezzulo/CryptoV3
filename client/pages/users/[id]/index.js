@@ -101,23 +101,25 @@ function index({ id, userData, userPosts }) {
 
   // const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
   const fullName = nameConverter(userData);
+
   return (
-    <div className="flex flex-col min-h-screen w-full">
+    <div className="min-h-screen bg-Eerie-Black">
       <Header />
-      <div className="flex items-center">
-        <div className="flex h-full rounded-full shadow-2xl m-5 p-1">
-          <img
-            src={userData.image}
-            className="flex rounded-full object-contain w-32 h-32"
-          />
-        </div>
-        <div className="flex h-full items-center ml-4">
+      <div className="flex items-center h-full w-full">
+        <img
+          src={userData.image}
+          className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
+        />
+        <div className="flex flex-col sm:flex-row h-full items-start sm:items-center justify-center ml-2 pt-2 sm:pt-0">
           <div>
-            <p className="text-xl font-light pr-3">
+            <p className="text-xl text-white font-light pr-3">
               Following ({userData.following.length}):{" "}
             </p>
           </div>
-          <div className="flex h-16 items-center justify-center bg-gray-100 p-2 rounded-md shadow">
+          <div
+            className="flex h-16 items-center justify-center bg-Jet-Gray
+           p-2 rounded-md shadow"
+          >
             {userData.following.map((i) => {
               return (
                 <div className="flex px-1">
@@ -131,12 +133,12 @@ function index({ id, userData, userPosts }) {
               );
             })}
           </div>
-          <div className="ml-2">
-            <p className="text-xl font-light pr-3">
+          <div className="sm:ml-2">
+            <p className="text-xl font-light pr-3 text-white">
               Followers ({userData.followers.length}):{" "}
             </p>
           </div>
-          <div className="flex h-16 items-center justify-center bg-gray-100 p-2 rounded-md shadow">
+          <div className="flex h-16 items-center justify-center bg-Jet-Gray p-2 rounded-md shadow">
             {userData.followers.map((i) => {
               return (
                 <div className="flex px-1">
@@ -152,9 +154,15 @@ function index({ id, userData, userPosts }) {
           </div>
         </div>
       </div>
-      <h2 className="text-2xl font-thin ml-10">{fullName}</h2>
+      <h2 className="text-2xl font-thin ml-5 pb-2 sm:pb-0 sm:ml-10 text-white">
+        {fullName}
+      </h2>
       <div className="flex ml-5">
-        {isMe && <p className="font-light">Your public profile view</p>}
+        {isMe && (
+          <p className="font-light text-Ghost-White">
+            Your public profile view
+          </p>
+        )}
         {!isMe && (
           <div>
             {following && (
@@ -181,24 +189,24 @@ function index({ id, userData, userPosts }) {
       <div className="flex w-full justify-center ">
         {/* <WatchlistContainer username={fullName} /> */}
         <div className="flex-col p-5">
-          <h3 className="text-xl font-thin">
+          <h3 className="text-xl text-white font-thin ml-2">
             {fullName}'s Watchlists ({userData.watchlists.length}):
           </h3>
-          <div className="flex ">
+          <div className="flex flex-wrap items-center justify-center">
             {userData.watchlists.map((watchlist) => {
               return (
                 <div
-                  className="flex flex-col w-44 bg-gray-100 rounded mx-2 p-2 drop-shadow-md"
+                  className="flex flex-col my-2 w-44 bg-Jet-Gray rounded mx-2 p-2 drop-shadow-md"
                   key={watchlist._id}
                 >
-                  <p className="text-2xl font-thin">
+                  <p className="text-2xl font-thin text-white">
                     {watchlist.watchlistName}
                   </p>
                   {watchlist.coins[0].coin.map((i) => {
                     return (
                       <div className="hover:cursor-pointer">
                         <Link href={`/coins/${i.coinID}`}>
-                          <p className="text-xl font-thin bg-white my-1 rounded p-1 text-green-400 duration-100 hover:bg-gray-50">
+                          <p className="text-xl font-thin bg-Davys-Gray my-1 rounded p-1 text-green-400 duration-100 hover:bg-Davys-Gray-light">
                             {i.coinID}
                           </p>
                         </Link>
@@ -212,7 +220,7 @@ function index({ id, userData, userPosts }) {
         </div>
       </div>
       <div className="flex flex-col w-full items-center">
-        <h2 className="text-2xl font-thin">
+        <h2 className="text-xl text-white font-thin">
           {fullName}'s Posts (
           {
             userPosts.filter((p) => {
@@ -222,8 +230,8 @@ function index({ id, userData, userPosts }) {
           )
         </h2>
 
-        <div className="bg-gray-100 flex w-2/4 rounded drop-shadow-md">
-          <div className="flex flex-col w-full items-center min-h-54 max-h-96 overflow-auto p-2">
+        <div className="bg-Eerie-Black-dark flex w-full sm:w-3/4 md:w-2/4 sm:rounded drop-shadow-md">
+          <div className="flex flex-col w-full items-center min-h-54 max-h-96 overflow-auto sm:p-2">
             {userPosts
               .filter((p) => {
                 return p.postAuthor === userData?._id;
@@ -253,7 +261,7 @@ function index({ id, userData, userPosts }) {
                         mass: 0.4,
                         stiffness: 100,
                       }}
-                      className="flex items-center bg-gray-200 w-full rounded my-1 p-2"
+                      className="flex items-center bg-Jet-Gray text-white sm:border-none border-t border-Davys-Gray w-full sm:rounded sm:my-1 p-2 hover:bg-Davys-Gray"
                     >
                       <img
                         src={userData?.image}
@@ -262,13 +270,13 @@ function index({ id, userData, userPosts }) {
                       <div className="w-full px-3">
                         <div className="flex w-full justify-between">
                           <p>{fullName}</p>
-                          <p>
+                          <p className="font-light">
                             {new Date(i.createdAt)
                               .toISOString()
                               .substring(0, 10)}
                           </p>
                         </div>
-                        <div className="flex w-full justify-between">
+                        <div className="flex w-full font-light justify-between">
                           <p>{i.postBody}</p>
                         </div>
                       </div>
@@ -277,9 +285,6 @@ function index({ id, userData, userPosts }) {
                 );
               })}
           </div>
-        </div>
-        <div className="flex h-full w-full items-center justify-center">
-          {/* <FriendsDock sessionID={session?.id} userdata={userData} /> */}
         </div>
       </div>
     </div>
