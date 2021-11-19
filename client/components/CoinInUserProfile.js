@@ -40,10 +40,10 @@ function CoinInUserProfile({ coinID, watchlistName }) {
     );
   if (!data || data === "undefined")
     return (
-      <div className="flex flex-col bg-white items-center justify-center m-2 p-2 rounded hover:cursor-pointer">
+      <div className="flex flex-col bg-Davys-Gray items-center justify-center m-2 p-2 rounded hover:cursor-pointer">
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center">
-            <p className="font-light">Loading data...</p>{" "}
+          <div className="flex  items-center">
+            <p className="font-light text-white">Loading data...</p>{" "}
           </div>
         </div>
       </div>
