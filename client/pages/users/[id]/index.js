@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { nameConverter } from "../../../utils/helpers";
+import CoinInUserProfile from "../../../components/CoinInUserProfile";
 export async function getServerSideProps(context) {
   const res = await fetch(
     `http://localhost:5000/api/users/${context.query.id}`
@@ -127,6 +128,7 @@ function index({ id, userData, userPosts }) {
                     <img
                       className="flex object-contain -10 h-10 rounded-full hover:cursor-pointer"
                       src={i.image}
+                      alt="avatar"
                     />
                   </Link>
                 </div>
@@ -146,6 +148,7 @@ function index({ id, userData, userPosts }) {
                     <img
                       className="flex object-contain w-10 h-10 rounded-full hover:cursor-pointer"
                       src={i.image}
+                      alt="avatar"
                     />
                   </Link>
                 </div>
@@ -187,7 +190,6 @@ function index({ id, userData, userPosts }) {
         )}
       </div>
       <div className="flex w-full justify-center ">
-        {/* <WatchlistContainer username={fullName} /> */}
         <div className="flex-col p-5">
           <h3 className="text-xl text-white font-thin ml-2">
             {fullName}'s Watchlists ({userData.watchlists.length}):
@@ -196,20 +198,23 @@ function index({ id, userData, userPosts }) {
             {userData.watchlists.map((watchlist) => {
               return (
                 <div
-                  className="flex flex-col my-2 w-44 bg-Jet-Gray rounded mx-2 p-2 drop-shadow-md"
                   key={watchlist._id}
+                  className="flex flex-col bg-Jet-Gray drop-shadow-lg p-2
+                  rounded m-2 h-full w-64"
                 >
-                  <p className="text-2xl font-thin text-white">
+                  <p className="text-2xl font-light text-white">
                     {watchlist.watchlistName}
                   </p>
-                  {watchlist.coins[0].coin.map((i) => {
+                  {watchlist.coins[0].coin.map((coin) => {
                     return (
-                      <div className="hover:cursor-pointer">
-                        <Link href={`/coins/${i.coinID}`}>
-                          <p className="text-xl font-thin bg-Davys-Gray my-1 rounded p-1 text-green-400 duration-100 hover:bg-Davys-Gray-light">
-                            {i.coinID}
-                          </p>
-                        </Link>
+                      <div>
+                        <CoinInUserProfile
+                          coinID={coin.coinID}
+                          name={coin.name}
+                          symbol={coin.symbol}
+                          watchlistName={watchlist.watchlistName}
+                          dontShow={true}
+                        />
                       </div>
                     );
                   })}

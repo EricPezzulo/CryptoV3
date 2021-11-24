@@ -38,7 +38,7 @@ function FriendsDock({ sessionID }) {
                 <img
                   className="w-10 h-10 hover:cursor-pointer rounded-full object-cover"
                   src={i?.image}
-                  alt="pic"
+                  alt="avatar"
                 />
               </Link>
             </div>
@@ -58,6 +58,7 @@ function FriendsDock({ sessionID }) {
                 <img
                   className="flex object-contain w-10 h-10 rounded-full hover:cursor-pointer"
                   src={i.image}
+                  alt="avatar"
                 />
               </Link>
             </div>

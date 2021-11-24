@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
 import { fetcher } from "../utils/helpers";
 
-function CoinInUserProfile({ coinID, watchlistName }) {
+function CoinInUserProfile({ coinID, watchlistName, dontShow }) {
   const { data: session } = useSession();
   const { data, error } = useSWR(
     `https://api.coingecko.com/api/v3/coins/${coinID}`,
@@ -50,7 +50,7 @@ function CoinInUserProfile({ coinID, watchlistName }) {
     );
 
   return (
-    <div className="flex flex-col bg-Davys-Gray items-center justify-center m-2 p-2 rounded hover:cursor-pointer">
+    <div className="flex flex-col bg-Davys-Gray items-center justify-center m-2 p-2 rounded hover:bg-Davys-Gray-light hover:cursor-pointer">
       <div className="flex items-center justify-between w-full">
         {" "}
         <Link href={`/coins/${coinID}`}>
@@ -59,9 +59,11 @@ function CoinInUserProfile({ coinID, watchlistName }) {
             <p className="font-light text-white">({data.symbol})</p>{" "}
           </div>
         </Link>
-        <button onClick={() => removeFromWatchlist(coinID)}>
-          <DeleteIcon className="text-Ghost-White transition duration-200 hover:text-gray-400 hover:cursor-pointer" />
-        </button>
+        {!dontShow && (
+          <button onClick={() => removeFromWatchlist(coinID)}>
+            <DeleteIcon className="text-Ghost-White transition duration-200 hover:text-gray-400 hover:cursor-pointer" />
+          </button>
+        )}
       </div>
     </div>
   );

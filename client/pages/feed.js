@@ -6,6 +6,7 @@ import PublicIcon from "@mui/icons-material/Public";
 import AddReactionIcon from "@mui/icons-material/AddReaction";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
+import InfiniteScroll from "react-infinite-scroll-component";
 const apiEndpoint = `http://localhost:5000/api/posts`;
 
 function feed() {
@@ -14,6 +15,7 @@ function feed() {
   const [showFollowing, setShowFollowing] = useState(true);
   const [showPublic, setShowPublic] = useState(false);
   const { data: session } = useSession();
+  const [hasMore, setHasMore] = useState();
   useEffect(() => {
     const getPosts = async () => {
       const res = await fetch(apiEndpoint);
@@ -111,6 +113,18 @@ function feed() {
       );
     })
     .reverse();
+  const fetchMoreData = () => {
+    if (postData.length >= 10) {
+      setHasMore(false);
+      return;
+    }
+    // a fake async api call like which sends
+    // 20 more records in .5 secs
+    setTimeout(() => {
+      setPostData(postData.concat(Array.from({ length: 5 })));
+    }, 750);
+  };
+
   return (
     <div className="bg-Eerie-Black min-h-screen">
       <Header />
@@ -151,9 +165,13 @@ function feed() {
       <div className="flex w-full justify-center items-center sm:my-2">
         <NewPost />
       </div>
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center justify-center w-full">
         {showFollowing && <> {displayFollowing}</>}
-        {showPublic && <>{displayPublic}</>}
+        {showPublic && (
+          <div className="flex flex-col items-center  w-full">
+            {displayPublic}
+          </div>
+        )}
       </div>
     </div>
   );

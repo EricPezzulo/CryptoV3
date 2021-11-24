@@ -16,8 +16,6 @@
     "fastify": "^3.22.1",
     "fastify-cors": "^6.0.2",
     "fastify-env": "^2.1.1",
-    "fastify-socket.io": "^2.0.1",
-    "fastify-swagger": "^4.12.6",
     "mongodb": "^4.1.3",
     "mongoose": "^6.0.12",
     "nodemon": "^2.0.14"

@@ -5,7 +5,6 @@ import useSWR from "swr";
 import Header from "../../../components/Header";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import { AnimatePresence, motion } from "framer-motion";
-import CloseIcon from "@mui/icons-material/Close";
 export async function getServerSideProps({ query }) {
   const id = query;
   return {
@@ -111,10 +110,20 @@ function index({ props }) {
   }
   if (!coinData) {
     return (
-      <div className="flex flex-col w-full min-h-screen">
+      <div className="flex flex-col w-full h-screen bg-Eerie-Black items-center">
         <Header />
-        <div className="flex w-full items-center justify-center h-full">
-          <p className="text-3xl font-light">Loading Coin Data...</p>
+        <div className="flex bg-Jet-Gray animate-pulse h-44 w-44 rounded-full my-10"></div>
+        <div className="flex flex-row  bg-Jet-Gray animate-pulse w-3/4 h-64 rounded">
+          <div className="flex justify-center">
+            <div className="flex">
+              <p className="text-white text-xl p-5 font-light">
+                Loading coin data...
+              </p>
+            </div>{" "}
+            <div className="flex justify-center mt-5">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -200,11 +209,11 @@ function index({ props }) {
           </p>
         </p>
         <p
-          className="flex flex-col text-lg font-light text-white"
+          className="text-white text-lg font-thin"
           dangerouslySetInnerHTML={{
             __html: coinData?.description?.en
               ? coinData?.description?.en
-              : "no desc avalible",
+              : "no description avalible",
           }}
         ></p>
         <div className="flex p-5 w-full items-center justify-between">
