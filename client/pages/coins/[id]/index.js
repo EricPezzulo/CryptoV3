@@ -5,27 +5,22 @@ import useSWR from "swr";
 import Header from "../../../components/Header";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import { AnimatePresence, motion } from "framer-motion";
+import { fetcher } from "../../../utils/helpers";
 export async function getServerSideProps({ query }) {
   const id = query;
   return {
     props: { props: id },
   };
 }
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 function index({ props }) {
   const { data: session } = useSession();
-  const coinURL = props.id; // bitcoin
+  const coinURL = props.id;
   const [coinID, setCoinID] = useState(coinURL);
   const [watchlistName, setWatchlistName] = useState("");
   const [selectWatchlist, setSelectWatchlist] = useState("");
   const apiEndpoint = `https://api.coingecko.com/api/v3/coins/${coinURL}`;
   const [successMessage, setSuccessMessage] = useState(false);
   const [popUp, setPopUp] = useState(false);
-
-  const { data: userData, userError } = useSWR(
-    `http://localhost:5000/api/users/${session?.id}`,
-    fetcher
-  );
 
   const { data: coinData, coinError } = useSWR(apiEndpoint, fetcher);
 
@@ -64,8 +59,6 @@ function index({ props }) {
       });
       setSuccessMessage(true);
       setTimeout(() => setSuccessMessage(false), 2500);
-
-      // console.log(successMessage);
     } catch (error) {
       console.log(error);
     }
@@ -98,7 +91,7 @@ function index({ props }) {
       },
     },
   };
-  if (userError || coinError) {
+  if (coinError) {
     return (
       <div className="flex flex-col w-full min-h-screen">
         <Header />
@@ -128,55 +121,6 @@ function index({ props }) {
       </div>
     );
   }
-  if (!userData) {
-    return (
-      <div className="flex flex-col w-full min-h-screen">
-        <Header />
-        <div className="flex flex-col w-full h-full  justify-center items-center">
-          <div className="flex py-10">
-            <img src={coinData.image?.large} alt="currency logo" />
-          </div>
-        </div>
-        <div className="flex flex-col w-5/6 self-center bg-gray-100 rounded p-5">
-          <p className="flex text-lg font-light">
-            Name:&nbsp;{" "}
-            <p className="text-green-400 text-lg font-normal">
-              {coinData.name}
-            </p>
-          </p>
-          <p className="flex text-lg font-light">
-            Symbol:&nbsp; <p className="text-lg">({coinData.symbol})</p>
-          </p>
-          <p className="flex text-lg font-light">
-            Community Score:&nbsp;{" "}
-            <p className="text-lg">{coinData.community_score}</p>
-          </p>
-          <p className="flex text-lg font-light">
-            Current Price: &nbsp;
-            <p className="flex font-normal">
-              {Intl.NumberFormat("en-us", {
-                style: "currency",
-                currency: "USD",
-              }).format(coinData.market_data.current_price.usd)}
-            </p>
-          </p>
-          <p
-            dangerouslySetInnerHTML={{
-              __html: coinData?.description?.en
-                ? coinData?.description?.en
-                : "no desc",
-            }}
-            className="flex text-lg font-light "
-          >
-            Description: &nbsp;
-            {coinData?.description?.en
-              ? coinData?.description?.en
-              : "no description availible"}
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col w-full min-h-screen bg-Eerie-Black">
@@ -186,7 +130,7 @@ function index({ props }) {
           <img src={coinData.image?.large} alt="currency logo" />
         </div>
       </div>
-      <div className="flex flex-col w-full sm:w-5/6 self-center sm:bg-Jet-Gray rounded p-5">
+      <div className="flex flex-col w-full sm:w-5/6 self-center sm:bg-Jet-Gray sm:mb-4 rounded p-5">
         <p className="flex text-lg font-light text-white">
           Name:&nbsp;{" "}
           <p className="text-green-400 text-lg font-normal">{coinData.name}</p>
@@ -242,7 +186,7 @@ function index({ props }) {
               onChange={(e) => setSelectWatchlist(e.target.value)}
             >
               <option>--Choose Watchlist--</option>
-              {userData?.watchlists.map((coin) => {
+              {session?.watchlists.map((coin) => {
                 return (
                   <>
                     <option key={coin._id} value={coin.watchlistName}>

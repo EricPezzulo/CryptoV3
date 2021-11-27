@@ -30,6 +30,7 @@ export default async function auth(req, res) {
       async session({ session, user }) {
         session.id = user.id;
         session.following = user.following;
+        session.watchlists = user.watchlists;
         return session;
       },
     },
