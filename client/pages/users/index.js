@@ -44,7 +44,6 @@ function users({ users }) {
             return (
               <div key={user._id} className="flex my-1 h-full w-3/5 px-10">
                 <UserCard
-                  // name={Object.values(user.name[0]).slice(0, -1).join("")}
                   name={nameConverter(user)}
                   avatar={user.image}
                   userID={user._id}

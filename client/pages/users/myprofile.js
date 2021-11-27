@@ -238,7 +238,11 @@ function myprofile() {
           className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
         />
         <div className="flex h-full items-center justify-center ml-2 pt-2 sm:pt-0">
-          <FriendsDock sessionID={session?.id} />
+          <FriendsDock
+            sessionID={session?.id}
+            followings={session?.following}
+            followers={session?.followers}
+          />
         </div>
       </div>
       <div className="flex w-full justify-center">

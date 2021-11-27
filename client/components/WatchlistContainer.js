@@ -35,7 +35,6 @@ function WatchlistContainer() {
       .then((res) => setListOfCoins(res.data.watchlists));
   }, [listOfCoins]);
 
-  console.log(listOfCoins);
   if (!listOfCoins) return <div className="bg-Davys-Gray"> loading </div>;
   return (
     <div className="flex flex-wrap justify-center h-full p-3 rounded-md">

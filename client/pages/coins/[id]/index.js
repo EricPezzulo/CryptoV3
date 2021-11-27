@@ -131,19 +131,19 @@ function index({ props }) {
         </div>
       </div>
       <div className="flex flex-col w-full sm:w-5/6 self-center sm:bg-Jet-Gray sm:mb-4 rounded p-5">
-        <p className="flex text-lg font-light text-white">
+        <span className="flex text-lg font-light text-white">
           Name:&nbsp;{" "}
           <p className="text-green-400 text-lg font-normal">{coinData.name}</p>
-        </p>
-        <p className="flex text-lg font-light text-white">
+        </span>
+        <span className="flex text-lg font-light text-white">
           Symbol:&nbsp;{" "}
           <p className="text-lg text-white">({coinData.symbol})</p>
-        </p>
-        <p className="flex text-lg font-light text-white">
+        </span>
+        <span className="flex text-lg font-light text-white">
           Community Score:&nbsp;{" "}
           <p className="text-lg text-white">{coinData.community_score}</p>
-        </p>
-        <p className="flex text-lg font-light text-white">
+        </span>
+        <span className="flex text-lg font-light text-white">
           Current Price: &nbsp;
           <p className="flex font-normal text-white">
             {Intl.NumberFormat("en-us", {
@@ -151,7 +151,7 @@ function index({ props }) {
               currency: "USD",
             }).format(coinData.market_data.current_price.usd)}
           </p>
-        </p>
+        </span>
         <p
           className="text-white text-lg font-thin"
           dangerouslySetInnerHTML={{
@@ -186,7 +186,7 @@ function index({ props }) {
               onChange={(e) => setSelectWatchlist(e.target.value)}
             >
               <option>--Choose Watchlist--</option>
-              {session?.watchlists.map((coin) => {
+              {session?.watchlists.map((coin, key) => {
                 return (
                   <>
                     <option key={coin._id} value={coin.watchlistName}>
