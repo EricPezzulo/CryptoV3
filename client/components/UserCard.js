@@ -4,27 +4,54 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-function UserCard({ userData, name }) {
+
+export async function getServerSideProps(context) {
+  const res = await fetch(
+    `http://localhost:5000/api/users/${context.query.id}`
+  );
+  const userData = await res.json();
+  const posts = await fetch(`http://localhost:5000/api/posts`);
+  const userPosts = await posts.json();
+  const { id } = context.query;
+  return {
+    props: { id, userData },
+  };
+}
+
+function UserCard({ userData, name, id }) {
   const [following, setFollowing] = useState(null);
   const { data: session } = useSession();
   const refreshData = () => {
     router.replace(router.asPath);
   };
-  console.log(userData);
 
-  // console.log(following);
-  // if (userData.id === dummyState)
+  const isFollowing = () => {
+    const user = userData?.followers.find((i) => i.userID === session?.id);
+    if (user) {
+      setFollowing(true);
+    } else {
+      setFollowing(false);
+    }
+  };
 
+  useEffect(() => {
+    isFollowing();
+  });
   const unfollow = async () => {
     try {
       const res = await axios({
         url: `http://localhost:5000/api/users/${session?.id}/unfollow`,
         method: "PUT",
         data: {
-          userID: session?.id,
+          followingUser: {
+            userID: id,
+          },
+          currentUser: {
+            userID: session?.id,
+          },
         },
       });
-      setFollowing(false);
+      refreshData();
     } catch (error) {
       console.log(error);
     }
@@ -35,18 +62,24 @@ function UserCard({ userData, name }) {
         url: `http://localhost:5000/api/users/${session?.id}/follow`,
         method: "PUT",
         data: {
-          userID: session?.id,
-          image: avatar,
+          followingUser: {
+            userID: id,
+            image: userData.image,
+          },
+          currentUser: {
+            userID: session?.id,
+            image: session?.user?.image,
+          },
         },
       });
-      setFollowing(true);
+      refreshData();
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <div className="flex px-2 h-14 w-full bg-Jet-Gray rounded-lg justify-between items-center">
-      <Link href={`/users/${userData._id}`}>
+    <Link href={`/users/${userData._id}`}>
+      <div className="flex px-2 h-14 w-full bg-Jet-Gray hover:bg-Davys-Gray duration-150 ease-in-out rounded-lg justify-between items-center cursor-pointer">
         <div className="flex items-center justify-center cursor-pointer">
           <div className="flex h-10 w-10">
             <img
@@ -60,20 +93,13 @@ function UserCard({ userData, name }) {
             <p className="text-xl text-white font-light">{name}</p>
           </div>
         </div>
-      </Link>
-      {/* <div>
-        {following && (
-          <button type="button" onClick={unfollow}>
-            <HighlightOffIcon />
-          </button>
-        )}
-        {!following && (
-          <button type="button" onClick={follow}>
-            <AddIcon />
-          </button>
-        )}
-      </div> */}
-    </div>
+
+        <div>
+          {following && <HighlightOffIcon className="text-white" />}
+          {!following && <AddIcon className="text-white" />}
+        </div>
+      </div>
+    </Link>
   );
 }
 

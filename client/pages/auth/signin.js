@@ -16,39 +16,41 @@ export default function SignIn() {
     );
   }
   return (
-    <div className="flex flex-col w-full items-center min-h-screen">
+    <div className="flex flex-col w-full items-center min-h-screen bg-Eerie-Black">
       <Header />
       <div
-        className="flex bg-gray-100 rounded
-      mt-10 w-1/4 flex-col items-center justify-center"
+        className="flex bg-Jet-Gray rounded
+      mt-10 sm:w-1/4 py-4 flex-col items-center justify-center"
       >
-        <p className="text-2xl font-light">Sign In</p>
+        <p className="text-2xl font-light text-white">Sign In</p>
         <div className="flex">
           <div className="flex w-full rounded px-3 py-1">
             <div className="flex flex-col">
-              <div className="flex px-2 bg-white rounded w-full items-center py-1 cursor-pointer my-1">
-                <GitHubIcon
-                  className="hover:cursor-pointer text-3xl hover:scale-110 hover:text-blue-600 hover:duration-100 transition-all hover:ease-in-out"
-                  onClick={() =>
-                    signIn("github", { callbackUrl: "http://localhost:3000" })
-                  }
-                />
-                <p className="px-2">Login with Github</p>
+              <div
+                className="flex px-2 bg-Davys-Gray rounded w-full items-center py-1 cursor-pointer my-1 hover:bg-gray-500 duration-150 ease-in-out"
+                onClick={() =>
+                  signIn("github", { callbackUrl: "http://localhost:3000" })
+                }
+              >
+                <GitHubIcon className="hover:cursor-pointer text-3xl text-white" />
+                <p className="px-2 text-white font-light">Login with Github</p>
               </div>
               <div className="flex px-2">
                 {/* <GoogleIcon onClick={() => signIn("google")} /> */}
               </div>
               <div className="flex">
-                <div className="flex px-2 bg-white rounded w-full items-center py-1 cursor-pointer my-1">
-                  <TwitterIcon
-                    className="hover:cursor-pointer text-3xl hover:scale-110 hover:text-blue-600 hover:duration-100 transition-all hover:ease-in-out"
-                    onClick={() =>
-                      signIn("twitter", {
-                        callbackUrl: "http://localhost:3000",
-                      })
-                    }
-                  />
-                  <p className="px-2">Login with Twitter</p>
+                <div
+                  className="flex px-2 bg-Davys-Gray-light rounded w-full items-center py-1 cursor-pointer my-1 hover:bg-gray-500 duration-150 ease-in-out"
+                  onClick={() =>
+                    signIn("twitter", {
+                      callbackUrl: "http://localhost:3000",
+                    })
+                  }
+                >
+                  <TwitterIcon className="hover:cursor-pointer text-3xl text-white" />
+                  <p className="px-2 text-white font-light">
+                    Login with Twitter
+                  </p>
                 </div>
               </div>
             </div>

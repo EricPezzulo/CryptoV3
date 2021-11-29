@@ -23,7 +23,7 @@ function Header() {
     visable: {
       x: 0,
       y: 0,
-      height: "162px",
+      height: "124px",
       opacity: 1,
       transition: {
         type: "spring",
@@ -76,11 +76,7 @@ function Header() {
                         My Profile
                       </p>
                     </Link>
-                    <Link href={`/users/${session._id}/settings`}>
-                      <p className="flex cursor-pointer border-b border-Davys-Gray hover:bg-Davys-Gray duration-150 px-5 py-2">
-                        Settings
-                      </p>
-                    </Link>
+
                     <Link href={`/feed`}>
                       <p className="flex cursor-pointer border-b border-Davys-Gray hover:bg-Davys-Gray duration-150 px-5 py-2">
                         Feed
@@ -88,7 +84,7 @@ function Header() {
                     </Link>
 
                     <p
-                      className="flex items-center justify-center h-full cursor-pointer border-Davys-Gray hover:bg-Davys-Gray duration-150 rounded-bl"
+                      className="flex cursor-pointer  hover:bg-Davys-Gray duration-150 px-5 py-2"
                       onClick={() =>
                         signOut({ callbackUrl: `${window.location.origin}` })
                       }
