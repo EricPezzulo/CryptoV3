@@ -121,7 +121,51 @@ function index({ props }) {
       </div>
     );
   }
-
+  if (!session) {
+    return (
+      <div className="flex flex-col w-full min-h-screen bg-Eerie-Black">
+        <Header />
+        <div className="flex flex-col w-full h-full justify-center items-center">
+          <div className="flex py-10">
+            <img src={coinData.image?.large} alt="currency logo" />
+          </div>
+        </div>
+        <div className="flex flex-col w-full sm:w-5/6 self-center sm:bg-Jet-Gray sm:mb-4 rounded p-5">
+          <span className="flex text-lg font-light text-white">
+            Name:&nbsp;{" "}
+            <p className="text-green-400 text-lg font-normal">
+              {coinData.name}
+            </p>
+          </span>
+          <span className="flex text-lg font-light text-white">
+            Symbol:&nbsp;{" "}
+            <p className="text-lg text-white">({coinData.symbol})</p>
+          </span>
+          <span className="flex text-lg font-light text-white">
+            Community Score:&nbsp;{" "}
+            <p className="text-lg text-white">{coinData.community_score}</p>
+          </span>
+          <span className="flex text-lg font-light text-white">
+            Current Price: &nbsp;
+            <p className="flex font-normal text-white">
+              {Intl.NumberFormat("en-us", {
+                style: "currency",
+                currency: "USD",
+              }).format(coinData.market_data.current_price.usd)}
+            </p>
+          </span>
+          <p
+            className="text-white text-lg font-thin"
+            dangerouslySetInnerHTML={{
+              __html: coinData?.description?.en
+                ? coinData?.description?.en
+                : "no description avalible",
+            }}
+          ></p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col w-full min-h-screen bg-Eerie-Black">
       <Header />
@@ -211,12 +255,14 @@ function index({ props }) {
                   initial="hidden"
                   animate="visable"
                   exit="exit"
-                  className={`flex absolute top-5 sm:right-5 bg-Davys-Gray items-center min-h-max justify-between rounded`}
+                  className={`flex absolute top-5 sm:right-5 bg-Davys-Gray items-center h-10 justify-between rounded`}
                 >
                   <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
-                    <EmojiFlagsIcon className="text-white" />
+                    <div classname="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
+                      <EmojiFlagsIcon className="text-white" />
+                    </div>
                   </div>
-                  <span className="flex text-xl font-light px-2 h-full text-white">
+                  <span className="flex text-lg font-light text-white px-2">
                     Created new watchlist:
                     <span className="text-green-400">
                       &nbsp;{watchlistName}
@@ -241,12 +287,12 @@ function index({ props }) {
                   <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
                     <EmojiFlagsIcon className="text-white" />
                   </div>
-                  <p className="flex text-lg font-light px-2">
+                  <span className="flex text-lg font-light text-white px-2">
                     Added&nbsp;
-                    <p className="text-blue-400"> {coinData.name} </p>
+                    <span className="text-blue-400"> {coinData.name} </span>
                     &nbsp;to&nbsp;
                     <p className="text-green-400"> {selectWatchlist} </p>!
-                  </p>
+                  </span>
                 </motion.div>
               )}
             </AnimatePresence>
