@@ -26,7 +26,12 @@ export default function Home() {
   const pageChange = ({ selected }) => {
     setPageNumber(selected);
   };
-
+  const loading = [];
+  for (let i = 0; i < 10; i++) {
+    loading.push(
+      <div className="flex w-full p-8 bg-Davys-Gray animate-pulse rounded my-1"></div>
+    );
+  }
   const displayCoins = coinData
     .slice(pagesVisited, pagesVisited + coinsPerPage)
     .map((coin) => {
@@ -56,37 +61,32 @@ export default function Home() {
       );
     });
 
-  const loading = [];
-  for (let i = 0; i < 10; i++) {
-    loading.push(
-      <div className="flex w-full p-8 bg-Davys-Gray animate-pulse rounded my-1"></div>
-    );
-  }
+  // * loading skeletion not appearing-- remove for now* //
 
-  if (!coinData)
-    return (
-      <div className="flex flex-col w-full items-center justify-between h-screen bg-Eerie-Black">
-        <Header />
-        <div className="flex flex-col w-full h-full justify-center items-center">
-          <div className="flex flex-col sm:w-10/12 justify-center items-center h-full rounded-md w-full">
-            <div className="flex items-center">
-              <p className="text-white font-thin text-2xl py-2 ">
-                Loading Top 100
-              </p>
-              <div className="flex justify-center pl-2">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-              </div>
-            </div>
+  // if (!displayCoins)
+  //   return (
+  //     <div className="flex flex-col w-full items-center justify-between h-screen bg-Eerie-Black">
+  //       <Header />
+  //       <div className="flex flex-col w-full h-full justify-center items-center">
+  //         <div className="flex flex-col sm:w-10/12 justify-center items-center h-full rounded-md w-full">
+  //           <div className="flex items-center">
+  //             <p className="text-white font-thin text-2xl py-2 ">
+  //               Loading Top 100
+  //             </p>
+  //             <div className="flex justify-center pl-2">
+  //               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+  //             </div>
+  //           </div>
 
-            <div className="flex flex-col w-full items-center justify-center">
-              <div className="flex flex-col w-full items-center justify-center p-2">
-                {loading}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  //           <div className="flex flex-col w-full items-center justify-center">
+  //             <div className="flex flex-col w-full items-center justify-center p-2">
+  //               {loading}
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
 
   return (
     <div className="flex flex-col w-full items-center justify-between min-h-screen bg-Eerie-Black">

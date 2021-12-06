@@ -3,8 +3,16 @@ import Post from "../models/postModel.js";
 const postRoutes = async (fastify, opts, done) => {
   fastify.get("/", async (request, reply) => {
     try {
+      const page = request.query.page;
+      const limit = request.query.limit;
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+
       const posts = await Post.find({});
-      reply.status(200).send(posts);
+
+      const resultPosts = posts.slice(startIndex, endIndex);
+
+      reply.status(200).send(resultPosts);
       // console.log(posts);
     } catch (error) {
       reply.code(400).send({ errorMessage: error });

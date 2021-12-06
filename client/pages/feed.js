@@ -114,18 +114,6 @@ function feed() {
     })
     .reverse();
 
-  // const fetchMoreData = () => {
-  //   if (postData.length >= 10) {
-  //     setHasMore(false);
-  //     return;
-  //   }
-  //   // a fake async api call like which sends
-  //   // 20 more records in .5 secs
-  //   setTimeout(() => {
-  //     setPostData(postData.concat(Array.from({ length: 5 })));
-  //   }, 750);
-  // };
-
   return (
     <div className="bg-Eerie-Black min-h-screen">
       <Header />

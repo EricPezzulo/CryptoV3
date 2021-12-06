@@ -1,45 +1,78 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useEffect, useState } from "react";
+import Post from "../components/Post";
+import Loader from "../components/Loader";
+import EndMsg from "../components/EndMsg";
 
-function scroll() {
-  const [data, setData] = useState([]);
+function App() {
+  const [items, setItems] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(2);
 
-  const getdata = async () => {
-    const res = await axios.get(`http://localhost:5000/api/posts`);
-    setData(res.data);
+  useEffect(() => {
+    const getPosts = async () => {
+      const res = await fetch(
+        `http://localhost:5000/api/posts?page=1&limit=20`
+        // For json server use url below
+        // `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=20`
+      );
+      const data = await res.json();
+      setItems(data);
+    };
+
+    getPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    const res = await fetch(
+      `http://localhost:5000/api/posts?page=${page}&limit=20`
+      // For json server use url below
+      // `https://jsonplaceholder.typicode.com/comments?_page=${page}&_limit=20`
+    );
+    const data = await res.json();
+    return data;
   };
 
-  //   useEffect(() => {
-  //     const getdata = async () => {
-  //       const res = await axios.get(`http://localhost:5000/api/posts`);
-  //       setData(res.data);
-  //     };
-  //     getdata();
-  //   }, []);
-  //   console.log(data.length);
+  const fetchData = async () => {
+    const postsFromServer = await fetchPosts();
 
+    setItems([...items, ...postsFromServer]);
+    if (postsFromServer.length === 0 || postsFromServer.length < 20) {
+      setHasMore(false);
+    }
+    setPage(page + 1);
+  };
+  console.log(items);
   return (
-    <div className="flex h-full w-full">
-      <p>test scrolling</p>
-      <div>
+    <div className="flex flex-col w-full bg-gray-400">
+      <div className="flex flex-col mx-20">
         <InfiniteScroll
-          dataLength={data.length} //This is important field to render the next data
-          next={getdata}
-          hasMore={true}
-          loader={<h4>Loading...</h4>}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-          // below props only if you need pull down functionality
+          className="flex flex-col"
+          dataLength={items.length} //This is important field to render the next data
+          next={fetchData}
+          hasMore={hasMore}
+          loader={<Loader />}
+          endMessage={<EndMsg />}
         >
-          {data}
+          {items.map((item, key) => {
+            return (
+              <div
+                className="flex my-1 w-full items-center justify-center"
+                key={key}
+              >
+                <Post
+                  postAuthor={item.postAuthor}
+                  postBody={item.postBody}
+                  postCreated={item.createdAt}
+                />
+              </div>
+            );
+          })}
         </InfiniteScroll>
       </div>
     </div>
   );
 }
 
-export default scroll;
+export default App;
