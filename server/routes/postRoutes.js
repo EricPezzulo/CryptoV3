@@ -11,8 +11,9 @@ const postRoutes = async (fastify, opts, done) => {
       const posts = await Post.find({});
 
       const resultPosts = posts.slice(startIndex, endIndex);
+      const reversedPosts = [...resultPosts.reverse()];
 
-      reply.status(200).send(resultPosts);
+      reply.status(200).send(reversedPosts);
       // console.log(posts);
     } catch (error) {
       reply.code(400).send({ errorMessage: error });
