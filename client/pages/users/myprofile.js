@@ -1,78 +1,16 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import WatchlistContainer from "../../components/WatchlistContainer";
 import Header from "../../components/Header";
-import NewPost from "../../components/NewPost";
-import { AnimatePresence, motion } from "framer-motion";
 import FriendsDock from "../../components/FriendsDock";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import InfiniteScroll from "react-infinite-scroll-component";
-import Loader from "../../components/Loader";
-import EndMsg from "../../components/EndMsg";
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import MyProfilePosts from "../../components/MyProfilePosts";
 
 function myprofile() {
   const { data: session } = useSession();
-  const [postData, setPostData] = useState([]);
-  const { data: userData, userError } = useSWR(
-    `http://localhost:5000/api/users/${session?.id}`,
-    fetcher
-  );
 
-  const deletePost = async (_id) => {
-    await axios({
-      url: `http://localhost:5000/api/posts/${_id}/delete`,
-      method: "DELETE",
-      data: {
-        _id,
-      },
-    });
-  };
-
-  const [items, setItems] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(2);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      const res = await fetch(
-        `http://localhost:5000/api/posts?page=1&limit=20`
-        // For json server use url below
-        // `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=20`
-      );
-      const data = await res.json();
-      setItems(data);
-    };
-
-    getPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    const res = await fetch(
-      `http://localhost:5000/api/posts?page=${page}&limit=20`
-      // For json server use url below
-      // `https://jsonplaceholder.typicode.com/comments?_page=${page}&_limit=20`
-    );
-    const data = await res.json();
-    return data;
-  };
-
-  const fetchData = async () => {
-    const postsFromServer = await fetchPosts();
-
-    setItems([...items, ...postsFromServer]);
-    if (postsFromServer.length === 0 || postsFromServer.length < 20) {
-      setHasMore(false);
-    }
-    setPage(page + 1);
-  };
-
-  if (userError) return <div>failed</div>;
-  // if (userData || postData)
-  if (!userData || !postData)
+  if (!session)
     return (
       <div className="bg-Eerie-Black min-h-screen">
         <Header />
@@ -159,118 +97,14 @@ function myprofile() {
       </div>
     );
 
-  const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
+  // const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
 
-  if (!items)
-    return (
-      <div className="bg-Eerie-Black min-h-screen">
-        <Header />
-        <div className="flex h-full items-center w-full">
-          <img
-            src={userData.image}
-            className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
-          />
-          <div className="flex h-full items-center justify-center ml-2 pt-2 sm:pt-0">
-            <FriendsDock sessionID={session?.id} />
-          </div>
-        </div>
-        <div className="flex w-full justify-center">
-          <WatchlistContainer username={fullName} />
-        </div>
-        <div className="flex flex-col w-full items-center">
-          <h2 className="text-2xl font-thin text-white">
-            My Posts (
-            {
-              items.filter((p) => {
-                return p.postAuthor === session?.id;
-              }).length
-            }
-            )
-          </h2>
-          <div className=" flex w-full sm:w-3/4 md:w-2/4 sm:mt-5 sm:rounded pt-2">
-            <div className="flex bg-Eerie-Black-dark flex-col w-full shadow sm:rounded items-center min-h-54 max-h-96 overflow-auto sm:p-2">
-              <div className="flex-col w-full items-center justify-center">
-                <div className="flex flex-col mx-20">
-                  <InfiniteScroll
-                    className="flex flex-col w-full justify-center items-center"
-                    dataLength={followingPosts.length} //This is important field to render the next data
-                    next={fetchData}
-                    hasMore={hasMore}
-                    loader={<Loader />}
-                    endMessage={<EndMsg />}
-                  >
-                    {items
-                      .filter((p) => {
-                        return p.postAuthor === session?.id;
-                      })
-                      .reverse()
-                      .map((i) => {
-                        return (
-                          <AnimatePresence>
-                            <motion.div
-                              initial={{ x: 0, y: -100, opacity: 0 }}
-                              animate={{
-                                x: 0,
-                                y: 0,
-                                opacity: 1,
-                                transition: {
-                                  type: "spring",
-                                  damping: 10,
-                                  mass: 0.4,
-                                  stiffness: 100,
-                                },
-                              }}
-                              exit={{
-                                x: 0,
-                                y: -100,
-                                opacity: 0,
-                                damping: 10,
-                                mass: 0.4,
-                                stiffness: 100,
-                              }}
-                              className="flex bg-Jet-Gray w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100 text-white sm:my-1"
-                            >
-                              <img
-                                src={session?.user?.image}
-                                className="flex w-12 h-12 rounded-full"
-                              />
-                              <div className="w-full px-3">
-                                <div className="flex w-full justify-between">
-                                  <p>{fullName}</p>
-                                  <p className="font-light">
-                                    {new Date(i.createdAt)
-                                      .toISOString()
-                                      .substring(0, 10)}
-                                  </p>
-                                </div>
-                                <div className="flex w-full justify-between font-light">
-                                  <p>{i.postBody}</p>
-                                  <button
-                                    type="button"
-                                    onClick={() => deletePost(i._id)}
-                                  >
-                                    <DeleteIcon />
-                                  </button>
-                                </div>
-                              </div>
-                            </motion.div>
-                          </AnimatePresence>
-                        );
-                      })}
-                  </InfiniteScroll>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   return (
-    <div className="bg-Eerie-Black min-h-screen">
+    <div className="flex flex-col bg-Eerie-Black min-h-screen">
       <Header />
       <div className="flex h-full items-center w-full">
         <img
-          src={userData.image}
+          src={session?.image}
           className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
         />
         <div className="flex h-full items-center justify-center ml-2 pt-2 sm:pt-0">
@@ -282,93 +116,11 @@ function myprofile() {
         </div>
       </div>
       <div className="flex w-full justify-center">
-        <WatchlistContainer username={fullName} />
+        <WatchlistContainer />
       </div>
-      <div className="flex flex-col w-full items-center">
-        <h2 className="text-2xl font-thin text-white">
-          My Posts (
-          {
-            items.filter((p) => {
-              return p.postAuthor === session?.id;
-            }).length
-          }
-          )
-        </h2>
-        <div className=" flex w-full sm:w-3/4 md:w-2/4 sm:mt-5 sm:rounded pt-2">
-          <div className="flex bg-Eerie-Black-dark flex-col w-full shadow sm:rounded items-center min-h-54 max-h-96 overflow-auto sm:p-2">
-            <div className="flex-col w-full items-center justify-center">
-              <div className="flex flex-col">
-                <InfiniteScroll
-                  className="flex flex-col w-full justify-center items-center"
-                  dataLength={items.length} //This is important field to render the next data
-                  next={fetchData}
-                  hasMore={hasMore}
-                  loader={<Loader />}
-                  endMessage={<EndMsg />}
-                >
-                  {items
-                    .filter((p) => {
-                      return p.postAuthor === session?.id;
-                    })
-                    .reverse()
-                    .map((i) => {
-                      return (
-                        <AnimatePresence>
-                          <motion.div
-                            initial={{ x: 0, y: -100, opacity: 0 }}
-                            animate={{
-                              x: 0,
-                              y: 0,
-                              opacity: 1,
-                              transition: {
-                                type: "spring",
-                                damping: 10,
-                                mass: 0.4,
-                                stiffness: 100,
-                              },
-                            }}
-                            exit={{
-                              x: 0,
-                              y: -100,
-                              opacity: 0,
-                              damping: 10,
-                              mass: 0.4,
-                              stiffness: 100,
-                            }}
-                            className="flex bg-Jet-Gray w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100 text-white sm:my-1"
-                          >
-                            <img
-                              src={session?.user?.image}
-                              className="flex w-12 h-12 rounded-full"
-                            />
-                            <div className="w-full px-3">
-                              <div className="flex w-full justify-between">
-                                <p>{fullName}</p>
-                                <p className="font-light">
-                                  {new Date(i.createdAt)
-                                    .toISOString()
-                                    .substring(0, 10)}
-                                </p>
-                              </div>
-                              <div className="flex w-full justify-between font-light">
-                                <p>{i.postBody}</p>
-                                <button
-                                  type="button"
-                                  onClick={() => deletePost(i._id)}
-                                >
-                                  <DeleteIcon />
-                                </button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        </AnimatePresence>
-                      );
-                    })}
-                </InfiniteScroll>
-              </div>
-            </div>
-          </div>
-        </div>
+
+      <div className="flex w-full items-center justify-center">
+        <MyProfilePosts session={session} />
       </div>
     </div>
   );

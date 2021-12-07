@@ -13,3 +13,7 @@ Content-Type: "application/json"
 }
 ###
 GET http://localhost:5000/api/posts?page=1&limit=10
+
+###
+GET http://localhost:5000/api/posts/getuserposts?user=61929c8395f822e63562db35&page=1&limit=5 HTTP/1.1
+Content-Type: "application/json"

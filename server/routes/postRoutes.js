@@ -20,6 +20,29 @@ const postRoutes = async (fastify, opts, done) => {
     }
   });
 
+  // get posts from specific user
+  fastify.get("/getuserposts", async (request, reply) => {
+    try {
+      const user = request.query.user;
+      const page = request.query.page;
+      const limit = request.query.limit;
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const posts = await Post.find({});
+      const filteredPosts = [
+        ...posts.filter((p) => {
+          return p.postAuthor === user;
+        }),
+      ];
+      const resultPosts = filteredPosts.slice(startIndex, endIndex);
+
+      reply.status(200).send(resultPosts);
+      // console.log(posts);
+    } catch (error) {
+      reply.code(400).send({ errorMessage: error });
+    }
+  });
+
   fastify.post("/add", async (request, reply) => {
     try {
       const post = request.body;
@@ -37,6 +60,7 @@ const postRoutes = async (fastify, opts, done) => {
       const { id } = request.params;
       const { postID } = request.body;
       const updatedPost = await Post.findByIdAndDelete(id);
+      console.log("deleted post in DB");
       reply.status(201).send(updatedPost);
     } catch (error) {
       reply.status(500).send({ error: "could not delete post" });
