@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import UserCard from "./UserCard";
-import { nameConverter } from "../utils/helpers";
 
 function SearchBar({ placeholder, data, session }) {
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -9,7 +8,7 @@ function SearchBar({ placeholder, data, session }) {
 
   const handleFilter = (e) => {
     const searchWord = e.target.value;
-    const fullName = nameConverter(data);
+    // const fullName = nameConverter(data);
     const newFilter = data.filter((user) => {
       return user.name.includes(searchWord);
     });

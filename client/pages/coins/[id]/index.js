@@ -5,14 +5,15 @@ import useSWR from "swr";
 import Header from "../../../components/Header";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import { AnimatePresence, motion } from "framer-motion";
-import { fetcher } from "../../../utils/helpers";
+import { currencyConverter, fetcher } from "../../../utils/helpers";
+import Image from "next/image";
 export async function getServerSideProps({ query }) {
   const id = query;
   return {
     props: { props: id },
   };
 }
-function index({ props }) {
+function Index({ props }) {
   const { data: session } = useSession();
   const coinURL = props.id;
   const [coinID, setCoinID] = useState(coinURL);
@@ -112,7 +113,7 @@ function index({ props }) {
               <p className="text-white text-xl p-5 font-light">
                 Loading coin data...
               </p>
-            </div>{" "}
+            </div>
             <div className="flex justify-center mt-5">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             </div>
@@ -127,7 +128,12 @@ function index({ props }) {
         <Header />
         <div className="flex flex-col w-full h-full justify-center items-center">
           <div className="flex py-10">
-            <img src={coinData.image?.large} alt="currency logo" />
+            <Image
+              width={200}
+              height={200}
+              src={coinData.image?.large}
+              alt="currency logo"
+            />
           </div>
         </div>
         <div className="flex flex-col w-full sm:w-5/6 self-center sm:bg-Jet-Gray sm:mb-4 rounded p-5">
@@ -148,10 +154,7 @@ function index({ props }) {
           <span className="flex text-lg font-light text-white">
             Current Price: &nbsp;
             <p className="flex font-normal text-white">
-              {Intl.NumberFormat("en-us", {
-                style: "currency",
-                currency: "USD",
-              }).format(coinData.market_data.current_price.usd)}
+              {currencyConverter(coinData.market_data.current_price.usd)}
             </p>
           </span>
           <p
@@ -190,10 +193,7 @@ function index({ props }) {
         <span className="flex text-lg font-light text-white">
           Current Price: &nbsp;
           <p className="flex font-normal text-white">
-            {Intl.NumberFormat("en-us", {
-              style: "currency",
-              currency: "USD",
-            }).format(coinData.market_data.current_price.usd)}
+            {currencyConverter(coinData.market_data.current_price.usd)}
           </p>
         </span>
         <p
@@ -230,12 +230,13 @@ function index({ props }) {
               onChange={(e) => setSelectWatchlist(e.target.value)}
             >
               <option>--Choose Watchlist--</option>
-              {session?.watchlists.map((coin, key) => {
+              {session?.watchlists.map((coin, index) => {
                 return (
                   <>
-                    <option key={coin._id} value={coin.watchlistName}>
+                    {/* Still wants a "unique" ket prop ?? */}
+                    <option key={index} value={coin.watchlistName}>
                       {coin.watchlistName}
-                    </option>
+                    </option>{" "}
                   </>
                 );
               })}
@@ -303,4 +304,4 @@ function index({ props }) {
   );
 }
 
-export default index;
+export default Index;

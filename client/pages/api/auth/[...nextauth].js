@@ -37,5 +37,6 @@ export default async function auth(req, res) {
       },
     },
     database: process.env.MONGO_URI,
+    secret: process.env.SECRET,
   });
 }

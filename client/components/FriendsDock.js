@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 function FriendsDock({ sessionID, followings, followers }) {
@@ -11,15 +12,19 @@ function FriendsDock({ sessionID, followings, followers }) {
         </p>
       </div>
       <div className="flex h-16 items-center justify-center bg-Jet-Gray px-2 rounded-md shadow">
-        {followings.slice(0, 2).map((i) => {
+        {followings.slice(0, 2).map((i, key) => {
           return (
-            <div className="flex px-1 items-center justify-center">
+            <div key={key} className="flex px-1 items-center justify-center">
               <Link href={`/users/${i.userID}`}>
-                <img
-                  className="w-10 h-10 hover:cursor-pointer rounded-full object-cover"
-                  src={i?.image}
-                  alt="avatar"
-                />
+                <div className="flex border-2 rounded-full border-gray-600">
+                  <Image
+                    className="hover:cursor-pointer rounded-full object-cover"
+                    src={i?.image}
+                    width={45}
+                    height={45}
+                    alt="avatar"
+                  />
+                </div>
               </Link>
             </div>
           );
@@ -31,15 +36,19 @@ function FriendsDock({ sessionID, followings, followers }) {
         </p>
       </div>
       <div className="flex h-16 items-center justify-center bg-Jet-Gray px-2 rounded-md shadow">
-        {followers.slice(0, 2).map((i) => {
+        {followers.slice(0, 2).map((i, key) => {
           return (
-            <div className="flex px-1 items-center justify-center">
+            <div key={key} className="flex px-1 items-center justify-center">
               <Link href={`/users/${i.userID}`}>
-                <img
-                  className="flex object-contain w-10 h-10 rounded-full hover:cursor-pointer"
-                  src={i.image}
-                  alt="avatar"
-                />
+                <div className="flex border-2 rounded-full border-gray-600">
+                  <Image
+                    className="flex object-contain w-10 h-10 rounded-full hover:cursor-pointer"
+                    src={i.image}
+                    width={45}
+                    height={45}
+                    alt="avatar"
+                  />
+                </div>
               </Link>
             </div>
           );

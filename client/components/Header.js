@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -56,10 +57,12 @@ function Header() {
         </Link>
         <div className="flex">
           {session && (
-            <div className="flex flex-col h-10 w-10">
-              <img
-                className="flex rounded-full hover:cursor-pointer hover:scale-105 duration-200"
+            <div className="flex">
+              <Image
+                className="flex rounded-full hover:cursor-pointer"
                 src={session?.user?.image}
+                width={40}
+                height={40}
                 onClick={() => setOpenMenu(!openMenu)}
               />
               <AnimatePresence>

@@ -5,6 +5,7 @@ import { fetcher, nameConverter } from "../utils/helpers";
 import Delete from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 function Post({ postBody, postAuthor, postCreated, deletePost, postID }) {
   const apiEndpoint = `http://localhost:5000/api/users/${postAuthor}`;
@@ -35,7 +36,9 @@ function Post({ postBody, postAuthor, postCreated, deletePost, postID }) {
     <div className="flex bg-Eerie-Black-dark w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100">
       <Link href={`/users/${postAuthor}`}>
         <div className="flex w-full">
-          <img
+          <Image
+            width={55}
+            height={55}
             className="flex w-12 h-12 rounded-full"
             src={data.image}
             alt="avatar"

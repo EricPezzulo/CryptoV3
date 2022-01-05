@@ -16,14 +16,14 @@ const postRoutes = async (fastify, opts, done) => {
       reply.status(200).send(reversedPosts);
       // console.log(posts);
     } catch (error) {
-      reply.code(400).send({ errorMessage: error });
+      reply.status(400).send({ errorMessage: error });
     }
   });
 
   // get posts from specific user
   fastify.get("/getuserposts", async (request, reply) => {
     try {
-      const user = request.query.user;
+      const user = request.params;
       const page = request.query.page;
       const limit = request.query.limit;
       const startIndex = (page - 1) * limit;
@@ -35,11 +35,9 @@ const postRoutes = async (fastify, opts, done) => {
         }),
       ];
       const resultPosts = filteredPosts.slice(startIndex, endIndex);
-
       reply.status(200).send(resultPosts);
-      // console.log(posts);
     } catch (error) {
-      reply.code(400).send({ errorMessage: error });
+      reply.status(400).send({ errorMessage: error });
     }
   });
 

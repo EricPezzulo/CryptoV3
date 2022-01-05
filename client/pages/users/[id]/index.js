@@ -7,12 +7,15 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { nameConverter } from "../../../utils/helpers";
 import CoinInUserProfile from "../../../components/CoinInUserProfile";
+import Image from "next/image";
 export async function getServerSideProps(context) {
   const res = await fetch(
     `http://localhost:5000/api/users/${context.query.id}`
   );
   const userData = await res.json();
-  const posts = await fetch(`http://localhost:5000/api/posts`);
+  const posts = await fetch(
+    `http://localhost:5000/api/posts/getuserposts?page=1&limit=20`
+  );
   const userPosts = await posts.json();
   const { id } = context.query;
   return {
@@ -20,7 +23,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-function index({ id, userData, userPosts }) {
+function Index({ id, userData, userPosts }) {
   const { data: session } = useSession();
   const [following, setFollowing] = useState();
   const router = useRouter();
@@ -48,7 +51,6 @@ function index({ id, userData, userPosts }) {
     isFollowing();
     findIsMe();
   });
-
   const unfollow = async () => {
     try {
       const res = await axios({
@@ -102,15 +104,19 @@ function index({ id, userData, userPosts }) {
 
   // const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
   const fullName = nameConverter(userData);
-
+  console.log(userPosts);
   return (
     <div className="min-h-screen bg-Eerie-Black">
       <Header />
       <div className="flex items-center h-full w-full">
-        <img
-          src={userData.image}
-          className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
-        />
+        <div className="flex rounded-full object-contain border-2 border-gray-300 m-5">
+          <Image
+            src={userData.image}
+            width={130}
+            height={130}
+            className="flex rounded-full object-contain"
+          />
+        </div>
         <div className="flex flex-col sm:flex-row h-full items-start sm:items-center justify-center ml-2 pt-2 sm:pt-0">
           <div>
             <p className="text-xl text-white font-light pr-3">
@@ -121,15 +127,19 @@ function index({ id, userData, userPosts }) {
             className="flex h-16 items-center justify-center bg-Jet-Gray
            p-2 rounded-md shadow"
           >
-            {userData.following.slice(0, 2).map((i) => {
+            {userData.following.slice(0, 2).map((i, key) => {
               return (
-                <div className="flex px-1">
+                <div className="flex px-1" key={key}>
                   <Link href={`/users/${i.userID}`}>
-                    <img
-                      className="flex object-contain -10 h-10 rounded-full hover:cursor-pointer"
-                      src={i.image}
-                      alt="avatar"
-                    />
+                    <div className="flex border-2 rounded-full border-gray-600">
+                      <Image
+                        className="flex object-contain -10 h-10 rounded-full hover:cursor-pointer"
+                        src={i.image}
+                        width={45}
+                        height={45}
+                        alt="avatar"
+                      />
+                    </div>
                   </Link>
                 </div>
               );
@@ -141,15 +151,19 @@ function index({ id, userData, userPosts }) {
             </p>
           </div>
           <div className="flex h-16 items-center justify-center bg-Jet-Gray p-2 rounded-md shadow">
-            {userData.followers.slice(0, 2).map((i) => {
+            {userData.followers.slice(0, 2).map((i, key) => {
               return (
-                <div className="flex px-1">
+                <div key={key} className="flex px-1">
                   <Link href={`/users/${i.userID}`}>
-                    <img
-                      className="flex object-contain w-10 h-10 rounded-full hover:cursor-pointer"
-                      src={i.image}
-                      alt="avatar"
-                    />
+                    <div className="flex border-2 rounded-full border-gray-600">
+                      <Image
+                        className="flex object-contain w-10 h-10 rounded-full hover:cursor-pointer"
+                        src={i.image}
+                        width={45}
+                        height={45}
+                        alt="avatar"
+                      />
+                    </div>
                   </Link>
                 </div>
               );
@@ -195,19 +209,19 @@ function index({ id, userData, userPosts }) {
             {fullName}'s Watchlists ({userData.watchlists.length}):
           </h3>
           <div className="flex flex-wrap items-center justify-center">
-            {userData.watchlists.map((watchlist) => {
+            {userData.watchlists.map((watchlist, key) => {
               return (
                 <div
-                  key={watchlist._id}
+                  key={key}
                   className="flex flex-col bg-Jet-Gray drop-shadow-lg p-2
                   rounded m-2 h-full w-64"
                 >
                   <p className="text-2xl font-light text-white">
                     {watchlist.watchlistName}
                   </p>
-                  {watchlist.coins[0].coin.map((coin) => {
+                  {watchlist.coins[0].coin.map((coin, key) => {
                     return (
-                      <div>
+                      <div key={key}>
                         <CoinInUserProfile
                           coinID={coin.coinID}
                           name={coin.name}
@@ -226,18 +240,12 @@ function index({ id, userData, userPosts }) {
       </div>
       <div className="flex flex-col w-full items-center">
         <h2 className="text-xl text-white font-thin pb-2">
-          {fullName}'s Posts (
-          {
-            userPosts.filter((p) => {
-              return p.postAuthor === userData?._id;
-            }).length
-          }
-          )
+          {fullName}'s Posts ({userPosts.length})
         </h2>
 
         <div className="bg-Eerie-Black-dark flex w-full sm:w-3/4 md:w-2/4 sm:rounded drop-shadow-md">
           <div className="flex flex-col w-full items-center min-h-54 max-h-96 overflow-auto sm:p-2">
-            {userPosts
+            {/* {userPosts
               .filter((p) => {
                 return p.postAuthor === userData?._id;
               })
@@ -288,7 +296,7 @@ function index({ id, userData, userPosts }) {
                     </motion.div>
                   </AnimatePresence>
                 );
-              })}
+              })} */}
           </div>
         </div>
       </div>
@@ -296,4 +304,4 @@ function index({ id, userData, userPosts }) {
   );
 }
 
-export default index;
+export default Index;

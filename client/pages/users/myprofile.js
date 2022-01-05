@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import axios from "axios";
 import WatchlistContainer from "../../components/WatchlistContainer";
 import Header from "../../components/Header";
 import FriendsDock from "../../components/FriendsDock";
 import { useSession } from "next-auth/react";
 import MyProfilePosts from "../../components/MyProfilePosts";
+import Image from "next/image";
 
 function myprofile() {
   const { data: session } = useSession();
@@ -96,17 +94,18 @@ function myprofile() {
         </div>
       </div>
     );
-
-  // const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
-
   return (
     <div className="flex flex-col bg-Eerie-Black min-h-screen">
       <Header />
-      <div className="flex h-full items-center w-full">
-        <img
-          src={session?.image}
-          className="flex rounded-full object-contain w-32 h-32 m-5 p-1 drop-shadow-2xl border border-gray-300"
-        />
+      <div className="flex h-full items-center w-full ">
+        <div className="m-5 flex border-2 border-gray-300 rounded-full">
+          <Image
+            className="flex rounded-full object-contain"
+            src={session?.user?.image}
+            width={130}
+            height={130}
+          />
+        </div>
         <div className="flex h-full items-center justify-center ml-2 pt-2 sm:pt-0">
           <FriendsDock
             sessionID={session?.id}

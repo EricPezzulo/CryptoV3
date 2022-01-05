@@ -1,5 +1,13 @@
 module.exports = {
+  images: {
+    domains: [
+      "pbs.twimg.com",
+      "assets.coingecko.com",
+      "avatars.githubusercontent.com",
+    ],
+  },
   env: {
+    SECRET: "DUhUIuz0lKeGIEXj7jkSt/rY6ZSW3oT74u9nwKzc8kE=",
     GITHUB_ID: "1333f379c9526f54c57d",
     GITHUB_SECRET: "a256c2e6430941b6b5c24796e9eed8a31b251b05",
     GOOGLE_CLIENT_ID:
