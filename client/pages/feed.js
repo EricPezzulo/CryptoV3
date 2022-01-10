@@ -28,8 +28,8 @@ function feed() {
             <PublicIcon
               className={
                 showPublic
-                  ? `flex w-full h-10 hover:cursor-pointer text-blue-400`
-                  : `flex w-full h-10 hover:cursor-pointer text-Ghost-White`
+                  ? `flex w-full h-14 hover:cursor-pointer text-blue-400`
+                  : `flex w-full h-14 hover:cursor-pointer text-Ghost-White`
               }
               onClick={handlePublic}
             />
@@ -44,9 +44,9 @@ function feed() {
               className={
                 showFollowing
                   ? `flex w-full
-              h-10 text-blue-400 hover:cursor-pointer`
+              h-14 text-blue-400 hover:cursor-pointer`
                   : `flex w-full
-              h-10 text-Ghost-White hover:cursor-pointer`
+              h-14 text-Ghost-White hover:cursor-pointer`
               }
               onClick={handleFollowing}
             />

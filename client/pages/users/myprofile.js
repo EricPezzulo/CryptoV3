@@ -137,7 +137,7 @@ function myprofile() {
         <WatchlistContainer />
       </div>
 
-      <div className="flex w-full items-center justify-center">
+      <div className="flex">
         <MyProfilePosts session={session} />
       </div>
     </div>

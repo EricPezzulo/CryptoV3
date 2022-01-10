@@ -44,61 +44,59 @@ export default function MyProfilePosts({ session }) {
   };
 
   const displayFollowing = (
-    <div className="flex-col w-full items-center justify-center">
-      <div className="flex flex-col">
-        <div
-          id="scrollableDiv"
-          className="flex w-full bg-Jet-Gray shadow-lg rounded my-5 h-64 overflow-y-auto overflow-x-hidden"
+    <div className="flex flex-col">
+      <div
+        id="scrollableDiv"
+        className="flex w-full bg-Jet-Gray shadow-lg rounded my-5 h-64 overflow-y-auto overflow-x-hidden"
+      >
+        <InfiniteScroll
+          dataLength={items.length}
+          next={fetchData}
+          hasMore={hasMore}
+          loader={<Loader />}
+          endMessage={<EndMsg />}
+          className="items-center justify-center"
+          scrollableTarget="scrollableDiv"
         >
-          <InfiniteScroll
-            dataLength={items.length}
-            next={fetchData}
-            hasMore={hasMore}
-            loader={<Loader />}
-            endMessage={<EndMsg />}
-            className="items-center justify-center"
-            scrollableTarget="scrollableDiv"
-          >
-            <div className="flex flex-col justify-center items-center w-full sm:p-3 ">
-              {items.map((i) => {
-                return (
-                  <motion.div
-                    initial={{ x: 0, y: -20, opacity: 0 }}
-                    animate={{
-                      x: 0,
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        damping: 10,
-                        mass: 0.4,
-                        stiffness: 100,
-                      },
-                    }}
-                    exit={{
-                      x: 0,
-                      y: -100,
-                      opacity: 0,
+          <div className="flex flex-col justify-center items-center w-full sm:p-3 ">
+            {items.map((i) => {
+              return (
+                <motion.div
+                  initial={{ x: 0, y: -20, opacity: 0 }}
+                  animate={{
+                    x: 0,
+                    y: 0,
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
                       damping: 10,
                       mass: 0.4,
                       stiffness: 100,
-                    }}
-                    key={i._id}
-                    className="flex w-full sm:w-full sm:my-1"
-                  >
-                    <Post
-                      postBody={i.postBody}
-                      postCreated={i.createdAt}
-                      postAuthor={i.postAuthor}
-                      deletePost={true}
-                      postID={i._id}
-                    />
-                  </motion.div>
-                );
-              })}
-            </div>
-          </InfiniteScroll>
-        </div>
+                    },
+                  }}
+                  exit={{
+                    x: 0,
+                    y: -100,
+                    opacity: 0,
+                    damping: 10,
+                    mass: 0.4,
+                    stiffness: 100,
+                  }}
+                  key={i._id}
+                  className="flex sm:my-1"
+                >
+                  <Post
+                    postBody={i.postBody}
+                    postCreated={i.createdAt}
+                    postAuthor={i.postAuthor}
+                    deletePost={true}
+                    postID={i._id}
+                  />
+                </motion.div>
+              );
+            })}
+          </div>
+        </InfiniteScroll>
       </div>
     </div>
   );
