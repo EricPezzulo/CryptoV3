@@ -104,7 +104,6 @@ function Index({ id, userData, userPosts }) {
 
   // const fullName = Object.values(userData.name[0]).slice(0, -1).join("");
   const fullName = nameConverter(userData);
-  console.log(userPosts);
   return (
     <div className="min-h-screen bg-Eerie-Black">
       <Header />
@@ -174,6 +173,7 @@ function Index({ id, userData, userPosts }) {
       <h2 className="text-2xl font-thin ml-5 pb-2 sm:pb-0 sm:ml-10 text-white">
         {fullName}
       </h2>
+      <p className="text-gray-400 ml-10 mb-2">{userData.status}</p>
       <div className="flex ml-5 sm:ml-10">
         {isMe && (
           <p className="font-light text-Ghost-White">
@@ -245,7 +245,7 @@ function Index({ id, userData, userPosts }) {
 
         <div className="bg-Eerie-Black-dark flex w-full sm:w-3/4 md:w-2/4 sm:rounded drop-shadow-md">
           <div className="flex flex-col w-full items-center min-h-54 max-h-96 overflow-auto sm:p-2">
-            {/* {userPosts
+            {userPosts
               .filter((p) => {
                 return p.postAuthor === userData?._id;
               })
@@ -296,7 +296,7 @@ function Index({ id, userData, userPosts }) {
                     </motion.div>
                   </AnimatePresence>
                 );
-              })} */}
+              })}
           </div>
         </div>
       </div>

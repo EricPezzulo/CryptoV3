@@ -1,12 +1,9 @@
-import fetch from "isomorphic-unfetch";
-import { useState } from "react";
 import Header from "../../components/Header";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import SearchBar from "../../components/SearchBar";
 
 function users() {
-  // const router = useRouter();
+  // // const router = useRouter();
   // // const refreshData = () => {
   // //   router.replace(router.asPath);
   // // };

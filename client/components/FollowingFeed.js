@@ -4,41 +4,30 @@ import Loader from "./Loader";
 import EndMsg from "./EndMsg";
 import { useEffect, useState } from "react";
 import Post from "./Post";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 
 export default function FollowingFeed() {
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
   const [followingPosts, setFollowingPosts] = useState([]);
+  const [postArr, setPostArr] = useState([]);
   const { data: session } = useSession();
 
   useEffect(() => {
-    const getPosts = async () => {
-      const res = await fetch(
-        `http://localhost:5000/api/posts?page=1&limit=20`
+    const fetchPosts = async () => {
+      const res = await axios.get(
+        `http://localhost:5000/api/posts?page=${page}&limit=20`
       );
-      const data = await res.json();
-      const filteredPostAuthors = session?.following?.map((i) => i.userID);
-      const filteredPosts = data.filter((j) =>
-        session?.following?.map((i) => i.userID).includes(j.postAuthor)
-      );
-      setFollowingPosts(filteredPosts);
+      const { data } = res;
+      setPostArr(session?.following?.map((i) => i.userID));
+      setFollowingPosts(data);
     };
-
-    getPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    const res = await fetch(
-      `http://localhost:5000/api/posts?page=${page}&limit=20`
-    );
-    const data = await res.json();
-    return data;
-  };
+    fetchPosts();
+  }, [followingPosts]);
 
   const fetchData = async () => {
     const postsFromServer = await fetchPosts();
-
     setFollowingPosts([...followingPosts, ...postsFromServer]);
     if (postsFromServer.length === 0 || postsFromServer.length < 20) {
       setHasMore(false);
@@ -58,6 +47,7 @@ export default function FollowingFeed() {
           endMessage={<EndMsg />}
         >
           {followingPosts
+            .filter((post) => postArr.includes(post.postAuthor))
             .map((i) => {
               return (
                 <motion.div

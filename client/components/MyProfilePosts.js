@@ -10,24 +10,21 @@ export default function MyProfilePosts({ session }) {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(2);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  //   const { data: session } = useSession();
+  // const { data: session } = useSession();
   const [items, setItems] = useState([]);
 
   useEffect(() => {
     const getPosts = async () => {
-      const res = await fetch(
-        `http://localhost:5000/api/posts/getuserposts?user=${session?.id}&page=${page}&limit=10`
-      );
+      const res = await fetch(`http://localhost:5000/api/posts/getuserposts`);
       const data = await res.json();
-      //   const filteredPostAuthors = session?.following?.map((i) => i.userID);
-      //   const filteredPosts = data.filter((j) =>
-      //     session?.following?.map((i) => i.userID).includes(j.postAuthor)
-      //   );
-      setItems(data);
+      const filteredPostAuthors = data.filter(
+        (post) => post.postAuthor === session.id
+      );
+      setItems(filteredPostAuthors);
     };
-
     getPosts();
   }, []);
+  console.log(items);
   const fetchPosts = async () => {
     const res = await fetch(
       `http://localhost:5000/api/posts/getuserposts?user=${session?.id}&page=${page}&limit=10`
@@ -87,7 +84,7 @@ export default function MyProfilePosts({ session }) {
                       stiffness: 100,
                     }}
                     key={i._id}
-                    className="flex w-full sm:full sm:my-1"
+                    className="flex w-full sm:w-full sm:my-1"
                   >
                     <Post
                       postBody={i.postBody}

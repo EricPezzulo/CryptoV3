@@ -244,6 +244,25 @@ const userRoutes = async (fastify, opts, done) => {
       reply.status(500).send({ error: "can't remove coin from watchlist" });
     }
   });
+
+  fastify.put("/:id/updatestatus", async (request, reply) => {
+    try {
+      const { id } = request.params;
+      const { status } = request.body;
+      let user = await User.findByIdAndUpdate(
+        { _id: id },
+        { status: status },
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+      reply.status(201).send(user);
+    } catch (error) {
+      reply.status(500).send("Could not update status");
+    }
+  });
+
   // delete watchlist
   fastify.put("/:id/deletewatchlist", async (request, reply) => {
     try {

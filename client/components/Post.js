@@ -33,7 +33,7 @@ function Post({ postBody, postAuthor, postCreated, deletePost, postID }) {
   const fullName = nameConverter(data);
   const timestamp = new Date(postCreated).toISOString().substring(0, 10);
   return (
-    <div className="flex bg-Eerie-Black-dark w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100">
+    <div className="group flex bg-Eerie-Black-dark w-full justify-between p-2 sm:rounded cursor-pointer hover:bg-Davys-Gray border-t border-Davys-Gray sm:border-none duration-100">
       <Link href={`/users/${postAuthor}`}>
         <div className="flex w-full">
           <Image
@@ -47,6 +47,13 @@ function Post({ postBody, postAuthor, postCreated, deletePost, postID }) {
             <div className="flex w-full justify-between px-2">
               <p className="text-white font-semibold">{fullName}</p>
               <p className="font-light text-white">{timestamp}</p>
+              {deletePost && (
+                <div className="flex items-end flex-end">
+                  <button type="button" onClick={() => deleteMyPost(postID)}>
+                    <Delete className="text-white mr-1 z-50 invisible group-hover:visible" />
+                  </button>
+                </div>
+              )}
             </div>
             <div className="flex justify-between">
               <div className="flex px-2">
@@ -56,13 +63,6 @@ function Post({ postBody, postAuthor, postCreated, deletePost, postID }) {
           </div>
         </div>
       </Link>
-      {deletePost && (
-        <div>
-          <button type="button" onClick={() => deleteMyPost(postID)}>
-            <Delete className="text-white mr-1 z-50" />
-          </button>
-        </div>
-      )}
     </div>
   );
 }

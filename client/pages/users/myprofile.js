@@ -4,9 +4,21 @@ import FriendsDock from "../../components/FriendsDock";
 import { useSession } from "next-auth/react";
 import MyProfilePosts from "../../components/MyProfilePosts";
 import Image from "next/image";
+import axios from "axios";
+import { useState } from "react";
 
 function myprofile() {
   const { data: session } = useSession();
+  const [status, setStatus] = useState("");
+  const updateStatus = (e) => {
+    const res = axios({
+      url: `http://localhost:5000/api/users/${session.id}/updatestatus`,
+      method: "PUT",
+      data: {
+        status: e.target.value,
+      },
+    });
+  };
 
   if (!session)
     return (
@@ -113,6 +125,13 @@ function myprofile() {
             followers={session?.followers}
           />
         </div>
+      </div>
+      <div className="ml-5">
+        <input
+          onChange={updateStatus}
+          placeholder={session.status}
+          className="text-gray-400 bg-transparent outline-none"
+        />
       </div>
       <div className="flex w-full justify-center">
         <WatchlistContainer />

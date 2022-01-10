@@ -4,34 +4,25 @@ import { useEffect, useState } from "react";
 import Loader from "./Loader";
 import EndMsg from "./EndMsg";
 import Post from "./Post";
+import axios from "axios";
 import { useSession } from "next-auth/react";
+
 export default function PublicFeed() {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(2);
-  const [followingPosts, setFollowingPosts] = useState([]);
-
+  const [page, setPage] = useState(1);
   const { data: session } = useSession();
-
   useEffect(() => {
-    const getPosts = async () => {
-      const res = await fetch(
-        `http://localhost:5000/api/posts?page=1&limit=20`
+    const fetchPosts = async () => {
+      const res = await axios.get(
+        `http://localhost:5000/api/posts?page=${page}&limit=20`
       );
-      const data = await res.json();
+      const { data } = res;
       setItems(data);
+      return data;
     };
-
-    getPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    const res = await fetch(
-      `http://localhost:5000/api/posts?page=${page}&limit=20`
-    );
-    const data = await res.json();
-    return data;
-  };
+    fetchPosts();
+  }, [items]);
 
   const fetchData = async () => {
     const postsFromServer = await fetchPosts();

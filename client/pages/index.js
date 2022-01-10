@@ -4,8 +4,11 @@ import ReactPaginate from "react-paginate";
 import CoinCard from "../components/CoinCard";
 import Link from "next/link";
 import Header from "../components/Header";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
+  console.log(session);
   const [coinData, setCoinData] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [coinsPerPage, setCoinsPerPage] = useState(10);

@@ -31,8 +31,8 @@ export default async function auth(req, res) {
         session.id = user.id;
         session.following = user.following;
         session.followers = user.followers;
-
         session.watchlists = user.watchlists;
+        session.status = user.status;
         return session;
       },
     },

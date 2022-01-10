@@ -233,10 +233,10 @@ function Index({ props }) {
               {session?.watchlists.map((coin, index) => {
                 return (
                   <>
-                    {/* Still wants a "unique" ket prop ?? */}
+                    Still wants a "unique" key prop ??
                     <option key={index} value={coin.watchlistName}>
                       {coin.watchlistName}
-                    </option>{" "}
+                    </option>
                   </>
                 );
               })}
@@ -259,7 +259,7 @@ function Index({ props }) {
                   className={`flex absolute top-5 sm:right-5 bg-Davys-Gray items-center h-10 justify-between rounded`}
                 >
                   <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
-                    <div classname="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
+                    <div className="flex bg-yellow-300 items-center justify-center h-full w-10  rounded-l">
                       <EmojiFlagsIcon className="text-white" />
                     </div>
                   </div>

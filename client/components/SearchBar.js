@@ -33,7 +33,7 @@ function SearchBar({ session }) {
           })
           .map((user, key) => {
             return (
-              <div key={key} className="flex my-1 h-full w-3/5 px-10">
+              <div key={key} className="flex my-1 h-full w-full sm:w-3/5 px-10">
                 <UserCard
                   name={nameConverter(user)}
                   avatar={user.image}

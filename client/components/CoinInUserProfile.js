@@ -22,7 +22,6 @@ function CoinInUserProfile({ coinID, watchlistName, dontShow }) {
           coinID,
         },
       });
-      console.log("removed");
     } catch (error) {
       console.log(error);
     }

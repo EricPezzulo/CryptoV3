@@ -1,14 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 function FriendsDock({ sessionID, followings, followers }) {
-  // const [following, setFollowing] = useState([]);
-
   return (
     <div className="flex flex-col w-full h-full items-start sm:my-2 sm:flex-row rounded sm:items-center justify-center ">
       <div className="flex min-w-min pr-2">
         <p className="flex font-light text-xl text-white">
-          Following ({followings.length}):{" "}
+          Following ({followings.length}):
         </p>
       </div>
       <div className="flex h-16 items-center justify-center bg-Jet-Gray px-2 rounded-md shadow">

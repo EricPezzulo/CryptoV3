@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
   watchlists: [WatchlistSchema],
   followers: { type: Array }, // store user _id's
   following: { type: Array }, // store user _id's
+  status: { type: String },
 });
 
 const User = mongoose.model("User", UserSchema);
