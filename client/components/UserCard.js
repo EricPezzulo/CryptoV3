@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export async function getServerSideProps(context) {
   const res = await fetch(
@@ -79,12 +80,14 @@ function UserCard({ userData, name, id }) {
   };
   return (
     <Link href={`/users/${userData._id}`}>
-      <div className="flex px-2 h-14 w-full bg-Jet-Gray hover:bg-Davys-Gray duration-150 ease-in-out rounded-lg justify-between items-center cursor-pointer">
-        <div className="flex items-center justify-center cursor-pointer">
-          <div className="flex h-10 w-10">
-            <img
-              className="flex rounded-full"
+      <div className="flex px-2 h-14 w-full bg-Jet-Gray hover:bg-Davys-Gray duration-150 ease-in-out rounded-lg justify-between items-center ">
+        <div className="flex items-center justify-center">
+          <div className="flex rounded-full border-2 border-gray-600">
+            <Image
+              className="flex rounded-full cursor-pointer"
               src={userData.image}
+              width={45}
+              height={45}
               alt="avatar"
             />
           </div>
@@ -95,8 +98,10 @@ function UserCard({ userData, name, id }) {
         </div>
 
         <div>
-          {following && <HighlightOffIcon className="text-white" />}
-          {!following && <AddIcon className="text-white" />}
+          {following && (
+            <HighlightOffIcon className="text-white cursor-pointer" />
+          )}
+          {!following && <AddIcon className="text-white cursor-pointer" />}
         </div>
       </div>
     </Link>
