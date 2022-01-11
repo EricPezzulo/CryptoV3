@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-function UserCard({ userData, name, id }) {
+function UserCard({ userData, name, userID }) {
   const router = useRouter();
   const [following, setFollowing] = useState(null);
   const { data: session } = useSession();
@@ -44,7 +44,7 @@ function UserCard({ userData, name, id }) {
         method: "PUT",
         data: {
           followingUser: {
-            userID: id,
+            userID: userID,
             image: userData.image,
           },
           currentUser: {
@@ -65,7 +65,7 @@ function UserCard({ userData, name, id }) {
         method: "PUT",
         data: {
           followingUser: {
-            userID: id,
+            userID: userID,
             image: userData.image,
           },
           currentUser: {

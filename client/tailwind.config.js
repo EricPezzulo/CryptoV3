@@ -4,8 +4,8 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      screens: {
-        xs: "370px",
+      minWidth: {
+        "profile-posts": "42rem",
       },
       minHeight: {
         "min-16": "64px",

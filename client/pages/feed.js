@@ -20,11 +20,11 @@ function feed() {
   };
 
   return (
-    <div className="bg-Eerie-Black min-h-screen">
+    <div className="bg-Eerie-Black min-h-screen flex flex-col">
       <Header />
-      <div className="flex w-full justify-center items-center py-5 text-Ghost-White sm:w-3/4 sm:mx-auto md:w-3/4">
-        <div className="flex-col h-full w-full">
-          <div className="flex flex-col w-full items-center justify-center">
+      <div className="flex w-4/5 sm:w-3/5 md:w-3/6 self-center justify-between items-center py-5 text-Ghost-White ">
+        <div className="flex flex-col">
+          <div className="flex flex-col w-full ">
             <PublicIcon
               className={
                 showPublic
@@ -38,8 +38,8 @@ function feed() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col h-full w-full">
-          <div className="flex flex-col w-full items-center justify-center">
+        <div className="flex flex-col">
+          <div className="flex flex-col">
             <AddReactionIcon
               className={
                 showFollowing

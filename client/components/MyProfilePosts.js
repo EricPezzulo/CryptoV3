@@ -5,63 +5,56 @@ import EndMsg from "./EndMsg";
 import { useEffect, useState } from "react";
 import Post from "./Post";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 export default function MyProfilePosts({ session }) {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(2);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  // const { data: session } = useSession();
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const getPosts = async () => {
-      const res = await fetch(`http://localhost:5000/api/posts/getuserposts`);
-      const data = await res.json();
-      const filteredPostAuthors = data.filter(
-        (post) => post.postAuthor === session.id
-      );
-      setItems(filteredPostAuthors);
-    };
-    getPosts();
+    fetchPosts();
   }, []);
-  console.log(items);
+
   const fetchPosts = async () => {
-    const res = await fetch(
-      `http://localhost:5000/api/posts/getuserposts?user=${session?.id}&page=${page}&limit=10`
+    const res = await axios.get(`http://localhost:5000/api/posts/getuserposts`);
+    const { data } = res;
+    const filteredPostAuthors = data.filter(
+      (post) => post.postAuthor === session.id
     );
-    const data = await res.json();
-    return data;
+    setItems(filteredPostAuthors);
+    return items;
   };
 
   const fetchData = async () => {
     const postsFromServer = await fetchPosts();
-
     setItems([...items, ...postsFromServer]);
     if (postsFromServer.length === 0 || postsFromServer.length < 20) {
       setHasMore(false);
     }
     setPage(page + 1);
   };
-
-  const displayFollowing = (
-    <div className="flex flex-col">
+  const displayMyPosts = (
+    <div className="flex flex-col max-w-xl sm:min-w-profile-posts self-center">
       <div
         id="scrollableDiv"
-        className="flex w-full bg-Jet-Gray shadow-lg rounded my-5 h-64 overflow-y-auto overflow-x-hidden"
+        className="flex flex-col w-full bg-Eerie-Black-dark p-2 shadow-lg rounded my-5 h-64 overflow-y-auto overflow-x-hidden"
       >
         <InfiniteScroll
+          className="flex flex-col w-full justify-center items-center"
           dataLength={items.length}
           next={fetchData}
           hasMore={hasMore}
           loader={<Loader />}
           endMessage={<EndMsg />}
-          className="items-center justify-center"
           scrollableTarget="scrollableDiv"
         >
-          <div className="flex flex-col justify-center items-center w-full sm:p-3 ">
-            {items.map((i) => {
+          {items
+            .map((i, key) => {
               return (
                 <motion.div
+                  className="flex w-full sm:my-1"
                   initial={{ x: 0, y: -20, opacity: 0 }}
                   animate={{
                     x: 0,
@@ -82,8 +75,7 @@ export default function MyProfilePosts({ session }) {
                     mass: 0.4,
                     stiffness: 100,
                   }}
-                  key={i._id}
-                  className="flex sm:my-1"
+                  key={key}
                 >
                   <Post
                     postBody={i.postBody}
@@ -94,8 +86,8 @@ export default function MyProfilePosts({ session }) {
                   />
                 </motion.div>
               );
-            })}
-          </div>
+            })
+            .reverse()}
         </InfiniteScroll>
       </div>
     </div>
@@ -106,13 +98,11 @@ export default function MyProfilePosts({ session }) {
     </div>;
   }
   return (
-    <div className="flex w-full items-center justify-center">
-      <div className="flex flex-col items-center">
-        <p className="text-white text-xl font-light">
-          My Posts({items.length})
-        </p>
-        <div>{displayFollowing}</div>
-      </div>
+    <div className="flex flex-col w-full">
+      <p className="text-white text-xl text-center font-light">
+        My Posts({items.length})
+      </p>
+      {displayMyPosts}
     </div>
   );
 }

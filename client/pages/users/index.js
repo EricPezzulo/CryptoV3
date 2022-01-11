@@ -3,10 +3,6 @@ import { useSession } from "next-auth/react";
 import SearchBar from "../../components/SearchBar";
 
 function users() {
-  // // const router = useRouter();
-  // // const refreshData = () => {
-  // //   router.replace(router.asPath);
-  // // };
   const { data: session } = useSession();
   return (
     <div className="flex flex-col w-full min-h-screen bg-Eerie-Black">

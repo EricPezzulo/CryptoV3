@@ -240,7 +240,13 @@ function Index({ id, userData, userPosts }) {
       </div>
       <div className="flex flex-col w-full items-center">
         <h2 className="text-xl text-white font-thin pb-2">
-          {fullName}'s Posts ({userPosts.length})
+          {fullName}'s Posts (
+          {
+            userPosts.filter((p) => {
+              return p.postAuthor === userData?._id;
+            }).length
+          }
+          )
         </h2>
 
         <div className="bg-Eerie-Black-dark flex w-full sm:w-3/4 md:w-2/4 sm:rounded drop-shadow-md">
